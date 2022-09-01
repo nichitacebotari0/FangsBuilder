@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+
+
+    .clip-augment-container
+    {
+        clip-path: circle(34px at 50% 50%);
+    }
+    .clip-augment-image {
+        clip-path: circle(30px at 50% 50%);
+    }
+}
