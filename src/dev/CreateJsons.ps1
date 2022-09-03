@@ -10,14 +10,14 @@ foreach ($hero in $heroes) {
 }
 
 
-# Create the txts for each augment
+# Create the jsons for each augment
 function New-AugmentJson() {
     param (
         $directory
     )
     Write-Host $directory;
     $directory | Get-ChildItem -File -Filter *_icon.png | ForEach-Object {
-        $iconNameSplit = $($_ -split "_")
+        $iconNameSplit = $($_.Name -split "_")
         $properties = @{
             Id          = $iconNameSplit[0];
             Name        = $($iconNameSplit[1]);
@@ -29,11 +29,13 @@ function New-AugmentJson() {
         
         $fileName = $($iconNameSplit[0] + ".json")
         $filePath = Join-Path $directory $fileName
+        Write-Host $filePath
+        Write-Host $fileName
         $json | Out-File -FilePath $filePath -NoClobber # prevents overwrite, maybe should keep description text in a separate file and build it up into this json but  I see no value in it atm. inb4 i curse myself later
     }
 }
 
-function Get-HeroAugmentDirectories {
+function Get-AugmentDirectories {
     param (
         $directory
     )
@@ -41,7 +43,7 @@ function Get-HeroAugmentDirectories {
     return $result;
 }
 
-Get-HeroAugmentDirectories -directory $(Get-Location) | ForEach-Object { New-AugmentJson $_.FullName }
+Get-AugmentDirectories -directory $(Get-Location) | ForEach-Object { New-AugmentJson -directory $_.FullName }
 
 
 # script to add the iconpath argument that i forgot to add, facepalm. added iconpath to the new-augmentjson script above so this is largely unnecessary now 
@@ -67,7 +69,7 @@ Get-HeroAugmentDirectories -directory $(Get-Location) | ForEach-Object { Patch-A
 
 # Create a json for the hero and compile the hero's augments jsons into it
 function GetAugments($directory) {
-    return $directory | Get-ChildItem -File -Filter *.json | Sort-Object -Property Name | Get-Content -Raw | ConvertFrom-Json
+    Write-Output -NoEnumerate ($directory | Get-ChildItem -File -Filter *.json | Sort-Object -Property Name | Get-Content -Raw | ConvertFrom-Json)
 }
 
 function Get-HeroJson() {
@@ -105,7 +107,7 @@ function Get-HeroJson() {
     $locationPathSplit = (($directory).Path.Split('\'))
     $result = @{
         Id       = -1;
-        Name     = $locationPathSplit[$locationPathSplit.Count -1] 
+        Name     = $locationPathSplit[$locationPathSplit.Count - 1] 
         IconName = $heroIcon.Name;
         Augments = @()
     }
@@ -116,3 +118,31 @@ function Get-HeroJson() {
 Get-HeroJson (Get-Location) | ConvertTo-Json -Depth 7 |  Out-File HeroInfo.json
 
 
+# am I violatinvg DRY by canibalizing script above? Yes. Does it matter? No
+function Get-PositionalsJson() {
+    param (
+        $directory
+    )
+    
+    $locationPathSplit = (($directory).Path.Split('\'))   
+    $augmentCategory = @{
+        Type     = $locationPathSplit[$locationPathSplit.Count - 1];
+        Contents = @()
+    }
+    foreach ($subCategory in ($directory | Get-ChildItem -Directory)) {
+        $subCategoryNameSplit = $($subCategory.Name.Split("."))
+        $skillAugment = @{
+            Id       = $subCategoryNameSplit[0]; 
+            Name     = $subCategoryNameSplit[1];
+            Augments = GetAugments($subCategory);
+        }
+        $augmentCategory["Contents"] += $skillAugment
+    }
+    $augmentCategory
+}
+
+Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.Json
+
+
+# The actives at last
+GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.Json

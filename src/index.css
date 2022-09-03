@@ -4,12 +4,16 @@
 
 @layer utilities {
 
-
     .clip-augment-container
     {
-        clip-path: circle(34px at 50% 50%);
+        clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
     }
     .clip-augment-image {
-        clip-path: circle(30px at 50% 50%);
+        clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
+    }
+
+    .augment-tooltip {
+        position:fixed;
+        z-index: 1000;
     }
 }
