@@ -36,7 +36,7 @@ resource "azurerm_storage_account" "storage_account" {
   }
 }
 
-output "staname" {
+output staname {
   value = azurerm_storage_account.storage_account.name
 }
 
