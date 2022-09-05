@@ -38,7 +38,10 @@ jobs:
 
       #  Infrastructure setup
       - name: "Set up terraform"
+        id: terraform
         uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
 
       - name: Terraform fmt
         id: fmt
@@ -78,6 +81,11 @@ jobs:
         uses: azure/login@v1
         with:
           creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIBTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
+
+      - run: echo ${{ steps.apply.outputs.StorageAccountName}}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+      - run: echo ${{ steps.terraform.outputs.StorageAccountName}}
+        if: ${{ github.event_name == 'workflow_dispatch' }}
 
       - name: Azure CLI Action - Publish dist to azure storage account container
         if: ${{ github.event_name == 'workflow_dispatch' }}
