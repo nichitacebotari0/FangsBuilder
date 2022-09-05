@@ -224,9 +224,6 @@ function Hero(props) {
                                 {(item) =>
                                     <button class="basis-1/6 text-center pb-2 augment" onClick=
                                         {() => {
-                                            if (slots().some(x => x.value == iconPath)) {
-                                                return
-                                            }
                                             slots()[selectedSlot()].value = "ACTIVE/" + item.IconName;
                                             setSlots(slots());
                                         }}>
@@ -296,9 +293,6 @@ function Hero(props) {
                                 {(item) =>
                                     <button class="basis-1/3 border-white border-2 text-center augment" onClick=
                                         {() => {
-                                            if (slots().some(x => x.value == iconPath)) {
-                                                return
-                                            }
                                             slots()[selectedSlot()].value = props.path + "ULT/" + item.IconName;
                                             setSlots(slots());
                                         }}>
