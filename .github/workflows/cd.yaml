@@ -82,10 +82,10 @@ jobs:
         with:
           creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIBTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
 
-      - run: echo ${{ steps.apply.outputs.StorageAccountName}}
+      - run: echo ${{ steps.apply.outputs.staname}}
         if: ${{ github.event_name == 'workflow_dispatch' }}
       - run: |
-          output=$(terraform output StorageAccountName)
+          output=$(terraform output staname)
           echo $output
         if: ${{ github.event_name == 'workflow_dispatch' }}
 
