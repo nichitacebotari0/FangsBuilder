@@ -75,19 +75,23 @@ jobs:
         run: terraform apply -auto-approve -input=false
         working-directory: ${{ env.tf_actions_working_dir }}
 
-      # Deploy
-      - name: "Login via Azure CLI"
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: azure/login@v1
-        with:
-          creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIBTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
-
       - run: echo ${{ steps.apply.outputs.staname}}
         if: ${{ github.event_name == 'workflow_dispatch' }}
       - run: |
           output=$(terraform output staname)
           echo $output
         if: ${{ github.event_name == 'workflow_dispatch' }}
+      - run: |
+          output=$(terraform output "staname")
+          echo $output
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+
+      # Deploy
+      - name: "Login via Azure CLI"
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIBTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
 
       - name: Azure CLI Action - Publish dist to azure storage account container
         if: ${{ github.event_name == 'workflow_dispatch' }}

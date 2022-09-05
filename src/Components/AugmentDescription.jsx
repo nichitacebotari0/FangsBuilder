@@ -4,11 +4,13 @@ function AugmentDescription(props) {
             <div class="flex flex-col p-2">
                 <div class="basis-2/12 border-white border-b-2 font-bold">{props.data.Name}</div>
                 <div class="basis-10/12 text-sm">
+                    <div class="flex flex-col">
                     <For each={props.data.Description}>
                         {(item) =>
-                            <p>{item}</p>
+                            <div>{item}</div>
                         }
                     </For>
+                    </div>
                 </div>
             </div>
         </div>
