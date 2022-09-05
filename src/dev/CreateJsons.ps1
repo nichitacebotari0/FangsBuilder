@@ -141,8 +141,8 @@ function Get-PositionalsJson() {
     $augmentCategory
 }
 
-Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.Json
+Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.json
 
 
 # The actives at last
-GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.Json
+GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.json
