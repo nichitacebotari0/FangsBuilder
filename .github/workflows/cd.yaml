@@ -87,5 +87,4 @@ jobs:
         with:
           azcliversion: 2.39.0
           inlineScript: |
-            az storage blob delete-batch --source '$web' --auth-mode login --account-name 'prodstafangsbuilder'
             az storage blob upload-batch --destination '$web' --source './dist' --auth-mode login --account-name 'prodstafangsbuilder'
