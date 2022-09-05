@@ -1,8 +1,4 @@
 node_modules
 dist
-# ignore images and intermediary jsons used to create main jsons
-src/public/**/*.png
-src/public/*/*/**/
-src/public/POSITIONAL/*/
-src/public/ACTIVE/*/
-src/public/ACTIVE/[0-9]*.json
+# ignore static files
+src/public
