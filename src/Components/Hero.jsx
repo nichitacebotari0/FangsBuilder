@@ -1,5 +1,6 @@
-import { createEffect, createResource, createSignal, For, Show, Switch } from "solid-js";
+import { createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import AugmentCategory from "./AugmentCategory";
+import AugmentDescription from "./AugmentDescription";
 import CroppedImage from "./CroppedImage";
 
 async function fetcher(path, { value, refetching }) {
@@ -128,7 +129,7 @@ function Hero(props) {
                                 bg="bg-yellow-700"
                                 image={slots()[5].value}
                                 borderSize="42" maxWidth="100" minWidth="10"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                imageSize="38" imageH="50%" imageV="45%" />
                         </Show>
                     </div>
                     <div class="basis-40" onClick={() => setSelectedSlot(6)} >
@@ -146,7 +147,7 @@ function Hero(props) {
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
                     </div>
-                    <div class="basis-40" onClick={() => setSelectedSlot(7)} >
+                    <button class="basis-40 flexAugment" onClick={() => setSelectedSlot(7)} >
                         <Show when={slots()[7].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
@@ -160,11 +161,13 @@ function Hero(props) {
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
+                        <div class="text-white flexAugment-picker">picker</div>
+                    </button>
                 </div>
 
-                <div class="flex flex-row flex-wrap">
+                <div class="flex flex-row flex-wrap p-2">
                     <Switch >
+
                         <Match when={slots()[selectedSlot()].type === "POSITIONAL"}>
                             <For each={positional.Contents}>
                                 {(item) =>
@@ -185,18 +188,28 @@ function Hero(props) {
                         </Match>
 
                         <Match when={slots()[selectedSlot()].type === "ACTIVE"}>
-                            <div class="basis-1/3 border-white border-2">
-                                <div class="flex flex-col">
-                                    <div class="basis-2/12 m-2 border-white border-b-2">Actives</div>
-                                    <div class="basis-10/12">
-                                        <AugmentCategory path={"/ACTIVE/"} color="yellow-700" data={actives}
-                                            click={(iconPath) => {
-                                                slots()[selectedSlot()].value = iconPath;
-                                                setSlots(slots());
-                                            }} />
-                                    </div>
-                                </div>
-                            </div>
+                            <For each={actives}>
+                                {(item) =>
+                                    <button class="basis-1/6 text-center pb-2 augment" onClick=
+                                        {() => {
+                                            slots()[selectedSlot()].value = "ACTIVE/" + item.IconName;
+                                            setSlots(slots());
+                                        }}>
+                                        <div class="basis-10/12">
+                                            <CroppedImage
+                                                imgbg="bg-black"
+                                                bg={"bg-yellow-700"}
+                                                image={"ACTIVE/" + item.IconName}
+                                                borderSize="40" maxWidth="100" minWidth="60"
+                                                imageSize="38" imageH="50%" imageV="50%" />
+                                        </div>
+                                        <div class={"basis-2/12 text-sm text-" + props.color}>{item.Name}</div>
+                                        <div class="augment-tooltip  w-80">
+                                            <AugmentDescription data={item} />
+                                        </div>
+                                    </button>
+                                }
+                            </For>
                         </Match>
 
                         <Match when={slots()[selectedSlot()].type === "RED"}>
@@ -240,7 +253,7 @@ function Hero(props) {
                         <Match when={slots()[selectedSlot()].type === "ULT"}>
                             <For each={data().Augments.filter((item) => item.Type == "ULT")[0].Contents}>
                                 {(item) =>
-                                    <div class="basis-1/3 border-white border-2 text-center" onClick=
+                                    <button class="basis-1/3 border-white border-2 text-center augment" onClick=
                                         {() => {
                                             slots()[selectedSlot()].value = props.path + "ULT/" + item.IconName;
                                             setSlots(slots());
@@ -253,8 +266,10 @@ function Hero(props) {
                                                 borderSize="40" maxWidth="100" minWidth="60"
                                                 imageSize="38" imageH="50%" imageV="50%" />
                                         </div>
-                                        <div class={"basis-2/12 text-sm text-" + props.color}>{item.Name}</div>
-                                    </div>
+                                        <div class="basis-2/12">
+                                            <AugmentDescription data={item} />
+                                        </div>
+                                    </button>
                                 }
                             </For>
                         </Match>

@@ -4,16 +4,49 @@
 
 @layer utilities {
 
-    .clip-augment-container
-    {
+    .clip-augment-container {
         clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
     }
+
     .clip-augment-image {
         clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
     }
 
-    .augment-tooltip {
-        position:fixed;
-        z-index: 1000;
+
+    .augment 
+    {
+        position: relative;
+        display: inline-block;
+    }
+
+    .augment .augment-tooltip {
+        display: none;
+        top:100%;
+        
+        z-index: 1;
+        position: absolute;
+    }
+    
+    .augment:hover .augment-tooltip {
+        display: block;
+    }
+
+
+    .flexAugment {
+        position: relative;
+        display: inline-block;
+    }
+
+    .flexAugment-picker {
+        display: none;
+        top:100%;
+        left:50%;
+
+        z-index: 1;
+        position: absolute;
+    }
+
+    .flexAugment:focus .flexAugment-picker {
+        display: block;
     }
 }
