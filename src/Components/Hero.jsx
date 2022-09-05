@@ -2,6 +2,7 @@ import { createEffect, createResource, createSignal, For, Match, Show, Switch } 
 import AugmentCategory from "./AugmentCategory";
 import AugmentDescription from "./AugmentDescription";
 import CroppedImage from "./CroppedImage";
+import FlexPicker from "./FlexPicker";
 
 async function fetcher(path, { value, refetching }) {
     let result = (await fetch(path));
@@ -19,12 +20,23 @@ const augmentSlots = [
     { type: "FLEX", value: null }
 ]
 
+function getColor(type) {
+    switch (type) {
+        case "RED":
+            return "bg-red-800";
+        case "YELLOW":
+            return "bg-yellow-800";
+        case "POSITIONAL":
+            return "bg-sky-700";
+    }
+}
+
 const positional = await (await fetch("/POSITIONAL/Info.json")).json()
 const actives = await (await fetch("/ACTIVE/Info.json")).json()
 function Hero(props) {
     const [data, { mutate, refetch }] = createResource(() => (props.path + 'HeroInfo.json'), fetcher);
     const [slots, setSlots] = createSignal(augmentSlots, { equals: false });
-    const [selectedSlot, setSelectedSlot] = createSignal(0);
+    const [selectedSlot, setSelectedSlot] = createSignal(0, { equals: false });
     return (
         <div class=" text-sky-50">
             <Show when={!data.loading}>
@@ -87,7 +99,7 @@ function Hero(props) {
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
                     </div>
-                    <div class="basis-40" onClick={() => setSelectedSlot(3)} >
+                    <button class="basis-40 flexAugment" >
                         <Show when={slots()[3].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
@@ -96,13 +108,19 @@ function Hero(props) {
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
                                 imgbg="bg-black"
-                                bg="bg-stone-500"
+                                bg={getColor(slots()[3].type)}
                                 image={slots()[3].value}
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
-                    <div class="basis-40" onClick={() => setSelectedSlot(4)} >
+                        <div class="text-white flexAugment-picker">
+                            <FlexPicker click={(c) => {
+                                slots()[3].type = c;
+                                setSelectedSlot(3);
+                            }} />
+                        </div>
+                    </button>
+                    <button class="basis-40" onClick={() => setSelectedSlot(4)} >
                         <Show when={slots()[4].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-violet-800"
@@ -116,8 +134,8 @@ function Hero(props) {
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
-                    <div class="basis-40" onClick={() => setSelectedSlot(5)} >
+                    </button>
+                    <button class="basis-40" onClick={() => setSelectedSlot(5)} >
                         <Show when={slots()[5].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-yellow-800"
@@ -128,11 +146,11 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg="bg-yellow-700"
                                 image={slots()[5].value}
-                                borderSize="42" maxWidth="100" minWidth="10"
+                                borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="50%" imageV="45%" />
                         </Show>
-                    </div>
-                    <div class="basis-40" onClick={() => setSelectedSlot(6)} >
+                    </button>
+                    <button class="basis-40 flexAugment" >
                         <Show when={slots()[6].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
@@ -141,13 +159,19 @@ function Hero(props) {
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
                                 imgbg="bg-black"
-                                bg="bg-stone-500"
+                                bg={getColor(slots()[6].type)}
                                 image={slots()[6].value}
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
-                    <button class="basis-40 flexAugment" onClick={() => setSelectedSlot(7)} >
+                        <div class="text-white flexAugment-picker">
+                            <FlexPicker click={(c) => {
+                                slots()[6].type = c;
+                                setSelectedSlot(6);
+                            }} />
+                        </div>
+                    </button>
+                    <button class="basis-40 flexAugment" >
                         <Show when={slots()[7].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
@@ -156,12 +180,17 @@ function Hero(props) {
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
                                 imgbg="bg-black"
-                                bg="bg-stone-500"
+                                bg={getColor(slots()[7].type)}
                                 image={slots()[7].value}
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                        <div class="text-white flexAugment-picker">picker</div>
+                        <div class="text-white flexAugment-picker">
+                            <FlexPicker click={(c) => {
+                                slots()[7].type = c;
+                                setSelectedSlot(7);
+                            }} />
+                        </div>
                     </button>
                 </div>
 
@@ -177,6 +206,9 @@ function Hero(props) {
                                             <div class="basis-10/12">
                                                 <AugmentCategory dir={"/POSITIONAL/"} color="sky-700" data={item}
                                                     click={(iconPath) => {
+                                                        if (slots().some(x => x.value == iconPath)) {
+                                                            return
+                                                        }
                                                         slots()[selectedSlot()].value = iconPath;
                                                         setSlots(slots());
                                                     }} />
@@ -192,6 +224,9 @@ function Hero(props) {
                                 {(item) =>
                                     <button class="basis-1/6 text-center pb-2 augment" onClick=
                                         {() => {
+                                            if (slots().some(x => x.value == iconPath)) {
+                                                return
+                                            }
                                             slots()[selectedSlot()].value = "ACTIVE/" + item.IconName;
                                             setSlots(slots());
                                         }}>
@@ -221,6 +256,9 @@ function Hero(props) {
                                             <div class="basis-10/12">
                                                 <AugmentCategory dir={props.path + "RED/"} color="red-800" data={item}
                                                     click={(iconPath) => {
+                                                        if (slots().some(x => x.value == iconPath)) {
+                                                            return
+                                                        }
                                                         slots()[selectedSlot()].value = iconPath;
                                                         setSlots(slots());
                                                     }} />
@@ -240,6 +278,9 @@ function Hero(props) {
                                             <div class="basis-10/12">
                                                 <AugmentCategory dir={props.path + "YELLOW/"} color="yellow-600" data={item}
                                                     click={(iconPath) => {
+                                                        if (slots().some(x => x.value == iconPath)) {
+                                                            return
+                                                        }
                                                         slots()[selectedSlot()].value = iconPath;
                                                         setSlots(slots());
                                                     }} />
@@ -255,6 +296,9 @@ function Hero(props) {
                                 {(item) =>
                                     <button class="basis-1/3 border-white border-2 text-center augment" onClick=
                                         {() => {
+                                            if (slots().some(x => x.value == iconPath)) {
+                                                return
+                                            }
                                             slots()[selectedSlot()].value = props.path + "ULT/" + item.IconName;
                                             setSlots(slots());
                                         }}>

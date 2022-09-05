@@ -40,7 +40,6 @@
     .flexAugment-picker {
         display: none;
         top:100%;
-        left:50%;
 
         z-index: 1;
         position: absolute;
