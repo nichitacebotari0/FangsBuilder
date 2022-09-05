@@ -18,6 +18,11 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@master
