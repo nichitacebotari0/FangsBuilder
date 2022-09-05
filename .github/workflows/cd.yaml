@@ -84,7 +84,9 @@ jobs:
 
       - run: echo ${{ steps.apply.outputs.StorageAccountName}}
         if: ${{ github.event_name == 'workflow_dispatch' }}
-      - run: echo ${{ steps.terraform.outputs.StorageAccountName}}
+      - run: |
+          output=$(terraform output StorageAccountName)
+          echo $output
         if: ${{ github.event_name == 'workflow_dispatch' }}
 
       - name: Azure CLI Action - Publish dist to azure storage account container
