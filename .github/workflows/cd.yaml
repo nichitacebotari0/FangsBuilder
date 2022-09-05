@@ -74,23 +74,6 @@ jobs:
         working-directory: ${{ env.tf_actions_working_dir }}
         run: exit 1
 
-      - name: Terraform Apply
-        id: apply
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        run: terraform apply -auto-approve -input=false
-        working-directory: ${{ env.tf_actions_working_dir }}
-
-      - run: echo ${{ steps.apply.outputs.staname}}
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-      - run: |
-          output=$(terraform output staname)
-          echo $output
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-      - run: |
-          output=$(terraform output "staname")
-          echo $output
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-
       # Deploy
       - name: "Login via Azure CLI"
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -104,5 +87,5 @@ jobs:
         with:
           azcliversion: 2.39.0
           inlineScript: |
-            az storage blob delete-batch --source '$web' --auth-mode login --account-name ${{ steps.apply.outputs.StorageAccountName}}
-            az storage blob upload-batch --destination '$web' --source './dist' --auth-mode login --account-name ${{ steps.apply.outputs.StorageAccountName}}
+            az storage blob delete-batch --source '$web' --auth-mode login --account-name 'prodstafangsbuilder'
+            az storage blob upload-batch --destination '$web' --source './dist' --auth-mode login --account-name 'prodstafangsbuilder'
