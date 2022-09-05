@@ -80,6 +80,7 @@ jobs:
           creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIBTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
 
       - name: Azure CLI Action - Publish dist to azure storage account container
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: Azure/cli@v1
         with:
           azcliversion: 2.39.0
