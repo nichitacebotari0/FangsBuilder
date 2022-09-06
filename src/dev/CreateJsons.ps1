@@ -10,10 +10,39 @@ foreach ($hero in $heroes) {
 }
 
 # Auto rename images to avoid a small bit of hassle and manual errors
-function AutoRenameImages($directory) {
-    
+function AutoRenameImages() {
+    param (
+        [Parameter(
+            Mandatory = $true, 
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        $directory
+    )
+    process {
+        $i = 2;
+        Write-Host $directory.FullName
+        $directory | Get-ChildItem -exclude *_icon.png, *_z.png | ForEach-Object {
+            Write-Host $_.FullName
+            if ("ULT" -eq $directory.Name -and 8 -eq $i) {
+                Rename-Item -Path $_.FullName -NewName "icon.png"
+                continue;
+            }
+
+            if ($i % 2 -eq 0) {
+                $name = ([System.Math]::Floor($i / 2)).ToString() + "__icon.png";
+            }
+            else {
+                $name = ([System.Math]::Floor($i / 2)).ToString() + "_z.png"
+            }
+            Rename-Item -Path $_.FullName -NewName $($name)
+            $i++;
+        }
+    }
 }
 
+function RenameHeroImages($directory) {
+    $directory | Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File -Filter *.png | Select-Object -First 1 } | AutoRenameImages 
+}
 
 # Create the jsons for each augment
 function New-AugmentJson() {
@@ -44,8 +73,7 @@ function Get-AugmentDirectories {
     param (
         $directory
     )
-    $result = $directory | Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File -Filter *_icon.png | Select-Object -First 1 }
-    return $result;
+    return $directory | Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File -Filter *_icon.png | Select-Object -First 1 }
 }
 
 Get-AugmentDirectories -directory $(Join-Path (Get-Location)  '\Heroes\') | ForEach-Object { New-AugmentJson -directory $_.FullName }
