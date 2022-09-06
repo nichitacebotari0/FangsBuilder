@@ -4,7 +4,7 @@ import Hero from './Components/Hero';
 
 const heroes = await (await fetch("/Heroes/Info.json")).json()
 function App() {
-  const [chosenHero, setChosenHero] = createSignal('Astrada')
+  const [chosenHero, setChosenHero] = createSignal('')
 
   return (
     <div class="flex flex-nowrap flex-row bg-sky-900">

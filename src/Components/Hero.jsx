@@ -39,8 +39,7 @@ function Hero(props) {
     const [selectedSlot, setSelectedSlot] = createSignal(0, { equals: false });
     return (
         <div class=" text-sky-50">
-            <Show when={data.loading} fallback={
-                <div>
+            <Show when={data.state == "ready"}>
                 <div class="flex flex-col justify-center mt-2 mb-2 p-2">
                     <div class="basis-10/12 text-center">
                         <CroppedImage
@@ -315,7 +314,7 @@ function Hero(props) {
                     </Switch>
                 </div>
 
-                </div>}></Show >
+                </Show >
         </div >
     );
 }
