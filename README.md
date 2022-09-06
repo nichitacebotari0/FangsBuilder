@@ -22,5 +22,5 @@ Deployment using Github Actions to Azure storage container created with terrafor
 Stuff done manually: 
 1. Created Service principal using az ad sp create-for-rbac with  contributor role for subscription
 2. Assigned him storage blob data contributorrole for the resource group
-3. Upload static files folders one by one to storage account using:  az storage fs directory upload -f '$web' --account-name prodstafangsbuilder -s ".\Empty.png" --recursive  
+3. Upload static files folders one by one to storage account using az cli  
 

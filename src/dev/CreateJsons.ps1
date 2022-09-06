@@ -9,6 +9,11 @@ foreach ($hero in $heroes) {
     } 
 }
 
+# Auto rename images to avoid a small bit of hassle and manual errors
+function AutoRenameImages($directory) {
+    
+}
+
 
 # Create the jsons for each augment
 function New-AugmentJson() {
@@ -39,11 +44,11 @@ function Get-AugmentDirectories {
     param (
         $directory
     )
-    $result = Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File | Select -First 1 }
+    $result = $directory | Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File -Filter *_icon.png | Select-Object -First 1 }
     return $result;
 }
 
-Get-AugmentDirectories -directory $(Get-Location) | ForEach-Object { New-AugmentJson -directory $_.FullName }
+Get-AugmentDirectories -directory $(Join-Path (Get-Location)  '\Heroes\') | ForEach-Object { New-AugmentJson -directory $_.FullName }
 
 
 # script to add the iconpath argument that i forgot to add, facepalm. added iconpath to the new-augmentjson script above so this is largely unnecessary now 
@@ -74,49 +79,63 @@ function GetAugments($directory) {
 
 function Get-HeroJson() {
     param (
-        $directory
+        [Parameter(
+            Position = 0, 
+            Mandatory = $true, 
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [String]$directory
     )
-    $allAugs = $directory | Get-ChildItem -Directory | ForEach-Object {
-        foreach ($category in $_) {
-            if ($category.Name -eq "ULT") {
+    process {
+        Write-Host $directory
+        $allAugs = $directory | Get-ChildItem -Directory | ForEach-Object {
+            foreach ($category in $_) {
+                if ($category.Name -eq "ULT") {
+                    $augmentCategory = @{
+                        Type     = $category.Name;
+                        Contents = GetAugments($category)
+                    }
+                    $augmentCategory
+                    continue;
+                }
+            
                 $augmentCategory = @{
                     Type     = $category.Name;
-                    Contents = GetAugments($category)
+                    Contents = @()
+                }
+                foreach ($subCategory in ($category | Get-ChildItem -Directory)) {
+                    $subCategoryNameSplit = $($subCategory.Name.Split("."))
+                    $skillAugment = @{
+                        Id       = $subCategoryNameSplit[0]; 
+                        Name     = $subCategoryNameSplit[1];
+                        Augments = GetAugments($subCategory);
+                    }
+                    $augmentCategory["Contents"] += $skillAugment
                 }
                 $augmentCategory
-                continue;
             }
-            
-            $augmentCategory = @{
-                Type     = $category.Name;
-                Contents = @()
-            }
-            foreach ($subCategory in ($category | Get-ChildItem -Directory)) {
-                $subCategoryNameSplit = $($subCategory.Name.Split("."))
-                $skillAugment = @{
-                    Id       = $subCategoryNameSplit[0]; 
-                    Name     = $subCategoryNameSplit[1];
-                    Augments = GetAugments($subCategory);
-                }
-                $augmentCategory["Contents"] += $skillAugment
-            }
-            $augmentCategory
         }
+        $heroIcon = $directory | Get-ChildItem -File -Filter icon.png | Select-Object -First 1
+        $locationPathSplit = (($directory).Split('\'))
+        $result = @{
+            Id       = -1;
+            Name     = $locationPathSplit[$locationPathSplit.Count - 1] 
+            IconName = $heroIcon.Name;
+            Augments = @()
+        }
+        $result["Augments"] = $allAugs
+        $result
     }
-    $heroIcon = $directory | Get-ChildItem -File -Filter icon.png | Select-Object -First 1
-    $locationPathSplit = (($directory).Path.Split('\'))
-    $result = @{
-        Id       = -1;
-        Name     = $locationPathSplit[$locationPathSplit.Count - 1] 
-        IconName = $heroIcon.Name;
-        Augments = @()
-    }
-    $result["Augments"] = $allAugs
-    $result
 }
 
-Get-HeroJson (Get-Location) | ConvertTo-Json -Depth 7 |  Out-File HeroInfo.json
+Get-ChildItem -directory $(Join-Path (Get-Location)  '\Heroes\') | ForEach-Object {
+    $_ | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File (Join-Path $_ 'HeroInfo.json')
+}
+    
 
+# Make a json linking to every hero json, yeah something feels a bit wrong. Ill refactor if im still working on this at least a week
+$array = $(Join-Path (Get-Location)  '\Heroes\') | Get-ChildItem -Directory | ForEach-Object { $_.Name }
+$array | ConvertTo-Json |  Out-File (Join-Path (Get-Location)  '\Heroes\Info.json' )
 
 # am I violatinvg DRY by canibalizing script above? Yes. Does it matter? No
 function Get-PositionalsJson() {

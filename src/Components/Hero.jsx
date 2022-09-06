@@ -25,7 +25,7 @@ function getColor(type) {
         case "RED":
             return "bg-red-800";
         case "YELLOW":
-            return "bg-yellow-800";
+            return "bg-yellow-600";
         case "POSITIONAL":
             return "bg-sky-700";
     }
@@ -39,7 +39,8 @@ function Hero(props) {
     const [selectedSlot, setSelectedSlot] = createSignal(0, { equals: false });
     return (
         <div class=" text-sky-50">
-            <Show when={!data.loading}>
+            <Show when={data.loading} fallback={
+                <div>
                 <div class="flex flex-col justify-center mt-2 mb-2 p-2">
                     <div class="basis-10/12 text-center">
                         <CroppedImage
@@ -53,7 +54,7 @@ function Hero(props) {
                 </div>
 
                 <div class="flex flex-wrap items-center justify-center mb-2 border-b-2 ml-2 mr-2 border-b-blue-800" >
-                    <div class="basis-40" onClick={() => setSelectedSlot(0)} >
+                    <button class="basis-40" onClick={() => setSelectedSlot(0)} >
                         <Show when={slots()[0].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-sky-700"
@@ -67,8 +68,8 @@ function Hero(props) {
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
-                    <div class="basis-40" onClick={() => setSelectedSlot(1)} >
+                    </button>
+                    <button class="basis-40" onClick={() => setSelectedSlot(1)} >
                         <Show when={slots()[1].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-red-800"
@@ -82,9 +83,9 @@ function Hero(props) {
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
+                    </button>
 
-                    <div class="basis-40" onClick={() => setSelectedSlot(2)}>
+                    <button class="basis-40" onClick={() => setSelectedSlot(2)}>
                         <Show when={slots()[2].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-yellow-600"
@@ -98,7 +99,7 @@ function Hero(props) {
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="55%" imageV="45%" />
                         </Show>
-                    </div>
+                    </button>
                     <button class="basis-40 flexAugment" >
                         <Show when={slots()[3].value} fallback={<CroppedImage
                             imgbg="bg-black"
@@ -144,7 +145,7 @@ function Hero(props) {
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
                                 imgbg="bg-black"
-                                bg="bg-yellow-700"
+                                bg="bg-yellow-800"
                                 image={slots()[5].value}
                                 borderSize="42" maxWidth="130" minWidth="130"
                                 imageSize="38" imageH="50%" imageV="45%" />
@@ -230,13 +231,13 @@ function Hero(props) {
                                         <div class="basis-10/12">
                                             <CroppedImage
                                                 imgbg="bg-black"
-                                                bg={"bg-yellow-700"}
+                                                bg={"bg-yellow-800"}
                                                 image={"ACTIVE/" + item.IconName}
                                                 borderSize="40" maxWidth="100" minWidth="60"
                                                 imageSize="38" imageH="50%" imageV="50%" />
                                         </div>
                                         <div class={"basis-2/12 text-sm text-" + props.color}>{item.Name}</div>
-                                        <div class="augment-tooltip  w-80">
+                                        <div class="augment-tooltip  w-20 sm:w-32 md:w-56 lg:w-80">
                                             <AugmentDescription data={item} />
                                         </div>
                                     </button>
@@ -314,7 +315,7 @@ function Hero(props) {
                     </Switch>
                 </div>
 
-            </Show >
+                </div>}></Show >
         </div >
     );
 }

@@ -22,7 +22,7 @@
     .augment .augment-tooltip {
         display: none;
         top:100%;
-        
+        left: -5px;
         z-index: 1;
         position: absolute;
     }
