@@ -10,7 +10,7 @@ foreach ($hero in $heroes) {
 }
 
 # Auto rename images to avoid a small bit of hassle and manual errors
-function AutoRenameImages() {
+function RenameFolderImages() {
     param (
         [Parameter(
             Mandatory = $true, 
@@ -40,9 +40,18 @@ function AutoRenameImages() {
     }
 }
 
-function RenameHeroImages($directory) {
+function AutoRenameHeroImages($directory) {
     $directory | Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File -Filter *.png | Select-Object -First 1 } | AutoRenameImages 
 }
+
+
+# OCR cus im tired of writing by hand after 4 heroes
+Find-Module -Name PsOcr | Install-Module -Scope CurrentUser
+# Must be run in windows powershell so im launching the powershell i got in path which is ver 5
+powershell
+Import-Module -Name C:\Users\Nichita\Documents\PowerShell\Modules\PsOcr 
+Get-ChildItem -File -Filter *_z.png -Recurse | Convert-PsoImageToText | Select-Object Text | foreach {$_.Text}| ConvertTo-Json | Set-Clipboard 
+
 
 # Create the jsons for each augment
 function New-AugmentJson() {
@@ -52,20 +61,13 @@ function New-AugmentJson() {
     Write-Host $directory;
     $directory | Get-ChildItem -File -Filter *_icon.png | ForEach-Object {
         $iconNameSplit = $($_.Name -split "_")
-        $properties = @{
+        $properties = [ordered]@{
             Id          = $iconNameSplit[0];
             Name        = $($iconNameSplit[1]);
-            Description = @("");
             IconName    = $_.Name;
+            Description = @("");
         }
-        $o = New-Object psobject -Property $properties;
-        $json = ConvertTo-Json $o 
-        
-        $fileName = $($iconNameSplit[0] + ".json")
-        $filePath = Join-Path $directory $fileName
-        Write-Host $filePath
-        Write-Host $fileName
-        $json | Out-File -FilePath $filePath -NoClobber # prevents overwrite, maybe should keep description text in a separate file and build it up into this json but  I see no value in it atm. inb4 i curse myself later
+        return $properties # prevents overwrite, maybe should keep description text in a separate file and build it up into this json but  I see no value in it atm. inb4 i curse myself later
     }
 }
 
@@ -76,6 +78,9 @@ function Get-AugmentDirectories {
     return $directory | Get-ChildItem -Directory -Recurse | Where-Object { $_ | Get-ChildItem -File -Filter *_icon.png | Select-Object -First 1 }
 }
 
+#single hero
+Get-AugmentDirectories -directory (Get-Location)| ForEach-Object { New-AugmentJson -directory $_.FullName }
+# root folder
 Get-AugmentDirectories -directory $(Join-Path (Get-Location)  '\Heroes\') | ForEach-Object { New-AugmentJson -directory $_.FullName }
 
 
@@ -100,10 +105,8 @@ function Patch-AugmentJson() {
 Get-HeroAugmentDirectories -directory $(Get-Location) | ForEach-Object { Patch-AugmentJson $_.FullName }
 
 
+
 # Create a json for the hero and compile the hero's augments jsons into it
-function GetAugments($directory) {
-    Write-Output -NoEnumerate ($directory | Get-ChildItem -File -Filter *.json | Sort-Object -Property Name | Get-Content -Raw | ConvertFrom-Json)
-}
 
 function Get-HeroJson() {
     param (
@@ -115,28 +118,27 @@ function Get-HeroJson() {
         [String]$directory
     )
     process {
-        Write-Host $directory
         $allAugs = $directory | Get-ChildItem -Directory | ForEach-Object {
             foreach ($category in $_) {
                 if ($category.Name -eq "ULT") {
-                    $augmentCategory = @{
+                    $augmentCategory = [ordered]@{
                         Type     = $category.Name;
-                        Contents = GetAugments($category)
+                        Contents = ,(New-AugmentJson $category)
                     }
                     $augmentCategory
                     continue;
                 }
             
-                $augmentCategory = @{
+                $augmentCategory = [ordered]@{
                     Type     = $category.Name;
                     Contents = @()
                 }
                 foreach ($subCategory in ($category | Get-ChildItem -Directory)) {
                     $subCategoryNameSplit = $($subCategory.Name.Split("."))
-                    $skillAugment = @{
+                    $skillAugment = [ordered]@{
                         Id       = $subCategoryNameSplit[0]; 
                         Name     = $subCategoryNameSplit[1];
-                        Augments = GetAugments($subCategory);
+                        Augments = ,(New-AugmentJson $subCategory)
                     }
                     $augmentCategory["Contents"] += $skillAugment
                 }
@@ -145,7 +147,7 @@ function Get-HeroJson() {
         }
         $heroIcon = $directory | Get-ChildItem -File -Filter icon.png | Select-Object -First 1
         $locationPathSplit = (($directory).Split('\'))
-        $result = @{
+        $result = [ordered]@{
             Id       = -1;
             Name     = $locationPathSplit[$locationPathSplit.Count - 1] 
             IconName = $heroIcon.Name;
@@ -156,6 +158,9 @@ function Get-HeroJson() {
     }
 }
 
+#single hero 
+Get-Location | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File 'HeroInfo.json'
+#all heroes
 Get-ChildItem -directory $(Join-Path (Get-Location)  '\Heroes\') | ForEach-Object {
     $_ | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File (Join-Path $_ 'HeroInfo.json')
 }
