@@ -23,6 +23,6 @@ Stuff done manually:
 1. Created Service principal using az ad sp create-for-rbac with  contributor role for subscription
 2. Assigned him storage blob data contributorrole for the resource group
 3. Upload static files folders one by one to storage account using az cli  
-    A) for single file: az storage blob upload -c '$web' --account-name accountname -f .\folder\filename.json  -n folder\filename.json  --overwrite 
+    A) for single file: az storage blob upload -c '$web' --account-name accountname -f .\Heroes\Hero\filename.json  -n Heroes\Hero\filename.json  --overwrite 
     B) for bunch:       az storage blob upload-batch -d '$web' --account-name accountname -s .\Heroes\Belroth\  --destination-path \Heroes\Belroth  
 

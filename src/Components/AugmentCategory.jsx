@@ -9,7 +9,7 @@ function AugmentCategory(props) {
             <For each={props.data.Augments}>
                 {(item) =>
                     <Show when={item}>
-                        <button class="basis-1/4 augment" onClick={() => props.click(path + item.IconName)}>
+                        <button class="basis-1/4 augment" onClick={() => props.click({ Path: path + item.IconName, Name: item.Name })}>
                             <CroppedImage
                                 imgbg="bg-black"
                                 bg={"bg-" + props.color}
