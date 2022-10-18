@@ -1,4 +1,5 @@
-import { createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
+import { useParams, useSearchParams } from "@solidjs/router";
+import { createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import AugmentCategory from "./AugmentCategory";
 import AugmentDescription from "./AugmentDescription";
 import CroppedImage from "./CroppedImage";
@@ -41,9 +42,11 @@ function getColor(type) {
 const positional = await (await fetch("/POSITIONAL/Info.json")).json()
 const actives = await (await fetch("/ACTIVE/Info.json")).json()
 function Hero(props) {
-    const [data, { mutate, refetch }] = createResource(() => (props.path + 'HeroInfo.json'),fetcher);
+    const params = useParams();
+    const [data] = createResource(() => (location.origin + "/Heroes/" + params.Hero + "/HeroInfo.json"), fetcher);
     const [slots, setSlots] = createSignal(augmentSlots, { equals: false });
     const [selectedSlot, setSelectedSlot] = createSignal(0, { equals: false });
+    const [searchParams, setSearchParams] = useSearchParams();
     return (
         <div class=" text-sky-50">
             <Show when={data.state == "ready"}>
@@ -51,7 +54,7 @@ function Hero(props) {
                     <div class="basis-10/12 text-center">
                         <CroppedImage
                             imgbg="bg-black"
-                            image={props.path + data().IconName}
+                            image={location.href + "/" + data().IconName}
                             bg="bg-sky-800"
                             borderSize="42"
                             imageSize="38" imageH="60%" imageV="55%" />
@@ -64,7 +67,7 @@ function Hero(props) {
                         <Show when={slots()[0].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-sky-700"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -80,7 +83,7 @@ function Hero(props) {
                         <Show when={slots()[1].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-red-800"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -97,7 +100,7 @@ function Hero(props) {
                         <Show when={slots()[2].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-yellow-600"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -113,7 +116,7 @@ function Hero(props) {
                         <Show when={slots()[3].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -135,7 +138,7 @@ function Hero(props) {
                         <Show when={slots()[4].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-violet-800"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -151,7 +154,7 @@ function Hero(props) {
                         <Show when={slots()[5].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-yellow-800"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -167,7 +170,7 @@ function Hero(props) {
                         <Show when={slots()[6].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -189,7 +192,7 @@ function Hero(props) {
                         <Show when={slots()[7].value} fallback={<CroppedImage
                             imgbg="bg-black"
                             bg="bg-stone-500"
-                            image="Empty.png"
+                            image={location.origin + "/" + "Empty.png"}
                             borderSize="32" maxWidth="130" minWidth="130"
                             imageSize="26" imageH="55%" imageV="45%" />}>
                             <CroppedImage
@@ -248,7 +251,7 @@ function Hero(props) {
                                             <CroppedImage
                                                 imgbg="bg-black"
                                                 bg={"bg-yellow-800"}
-                                                image={"ACTIVE/" + item.IconName}
+                                                image={"../ACTIVE/" + item.IconName}
                                                 borderSize="40" maxWidth="100" minWidth="60"
                                                 imageSize="38" imageH="50%" imageV="50%" />
                                         </div>
@@ -268,7 +271,7 @@ function Hero(props) {
                                         <div class="flex flex-col">
                                             <div class="basis-2/12 m-2 border-white border-b-2">{item.Name}</div>
                                             <div class="basis-10/12">
-                                                <AugmentCategory dir={props.path + "RED/"} color="red-800" data={item}
+                                                <AugmentCategory dir={location.href + "/" + "RED/"} color="red-800" data={item}
                                                     click={(obj) => {
                                                         if (slots().some(x => x.value == obj.Path)) {
                                                             return
@@ -291,7 +294,7 @@ function Hero(props) {
                                         <div class="flex flex-col">
                                             <div class="basis-2/12 m-2 border-white border-b-2">{item.Name}</div>
                                             <div class="basis-10/12">
-                                                <AugmentCategory dir={props.path + "YELLOW/"} color="yellow-600" data={item}
+                                                <AugmentCategory dir={location.href + "/" + "YELLOW/"} color="yellow-600" data={item}
                                                     click={(obj) => {
                                                         if (slots().some(x => x.value == obj.Path)) {
                                                             return
@@ -312,7 +315,7 @@ function Hero(props) {
                                 {(item) =>
                                     <button class="basis-1/3 border-white border-2 text-center augment" onClick=
                                         {() => {
-                                            slots()[selectedSlot()].value = props.path + "ULT/" + item.IconName;
+                                            slots()[selectedSlot()].value = location.href + "/" + "ULT/" + item.IconName;
                                             slots()[selectedSlot()].text = item.Name;
                                             setSlots(slots());
                                         }}>
@@ -320,7 +323,7 @@ function Hero(props) {
                                             <CroppedImage
                                                 imgbg="bg-black"
                                                 bg={"bg-violet-800"}
-                                                image={props.path + "ULT/" + item.IconName}
+                                                image={location.href + "/" + "ULT/" + item.IconName}
                                                 borderSize="40" maxWidth="100" minWidth="60"
                                                 imageSize="38" imageH="50%" imageV="50%" />
                                         </div>

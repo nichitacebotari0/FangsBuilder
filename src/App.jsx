@@ -1,31 +1,34 @@
+import { Routes, Route, A, useParams } from '@solidjs/router';
 import { createSignal, For } from 'solid-js';
 import CroppedImage from './Components/CroppedImage';
 import Hero from './Components/Hero';
+import testComponent from './Components/testcomponent';
 
 const heroes = await (await fetch("/Heroes/Info.json")).json()
 function App() {
   const [chosenHero, setChosenHero] = createSignal('')
 
   return (
-    <div class="flex flex-nowrap flex-col-reverse bg-sky-900">
-
-      <div class="bg-black h-screen">
-        <Hero path={'/Heroes/' +chosenHero()+"/"}/>
+    <div class="flex flex-nowrap flex-col bg-sky-900">
+      <div class="flex flex-row flex-wrap">
+        <For each={heroes}>
+          {item =>
+            <A class="basis-1/12 mt-1 -ml-10 sm:-ml-0" noScroll={true} replace={true} href={"/Heroes/" + item + "/"} onClick={() => setChosenHero(item)}>
+              <CroppedImage
+                imgbg="bg-black"
+                image={"/Heroes/" + item + "/icon.png"}
+                bg="bg-sky-800"
+                borderSize="40" minWidth="130" maxWidth="130"
+                imageSize="38" imageH="60%" imageV="55%" />
+            </A>}
+        </For>
       </div>
-      <div class="">
-        <div class="flex flex-row flex-wrap">
-          <For each={heroes}>
-            {item =>
-              <div class="basis-1/12 mt-1 -ml-10 sm:-ml-0" onClick={()=> setChosenHero(item)}>
-                <CroppedImage
-                  imgbg="bg-black"
-                  image={"/Heroes/" + item + "/icon.png"}
-                  bg="bg-sky-800"
-                  borderSize="40" minWidth="130" maxWidth="130"
-                  imageSize="38" imageH="60%" imageV="55%" />
-              </div>}
-          </For>
-        </div>
+      <div class="bg-black h-auto">
+        <Routes>
+
+          {/* <Route path={"/Heroes/:Hero/"} component={testComponent}></Route> */}
+          <Route path={"/Heroes/:Hero/"} component={Hero}></Route>
+        </Routes>
       </div>
     </div>
   );
