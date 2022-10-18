@@ -5,6 +5,7 @@ import CroppedImage from "./CroppedImage";
 import FlexPicker from "./FlexPicker";
 
 async function fetcher(path, { value, refetching }) {
+    resetAugments();
     let result = (await fetch(path));
     return await result.json();
 }
@@ -19,6 +20,12 @@ const augmentSlots = [
     { type: "FLEX", value: null, text: "" },
     { type: "FLEX", value: null, text: "" }
 ]
+function resetAugments() {
+    augmentSlots.forEach(element => {
+        element.value = null;
+        element.text = "";
+    });
+}
 
 function getColor(type) {
     switch (type) {
@@ -34,7 +41,7 @@ function getColor(type) {
 const positional = await (await fetch("/POSITIONAL/Info.json")).json()
 const actives = await (await fetch("/ACTIVE/Info.json")).json()
 function Hero(props) {
-    const [data, { mutate, refetch }] = createResource(() => (props.path + 'HeroInfo.json'), fetcher);
+    const [data, { mutate, refetch }] = createResource(() => (props.path + 'HeroInfo.json'),fetcher);
     const [slots, setSlots] = createSignal(augmentSlots, { equals: false });
     const [selectedSlot, setSelectedSlot] = createSignal(0, { equals: false });
     return (
