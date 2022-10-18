@@ -7,22 +7,22 @@ function App() {
   const [chosenHero, setChosenHero] = createSignal('')
 
   return (
-    <div class="flex flex-nowrap flex-row bg-sky-900">
+    <div class="flex flex-nowrap flex-col-reverse bg-sky-900">
 
-      <div class="basis-10/12 bg-black pb-96">
+      <div class="bg-black h-screen">
         <Hero path={'/Heroes/' +chosenHero()+"/"}/>
       </div>
-      <div class="basis-1/6">
+      <div class="">
         <div class="flex flex-row flex-wrap">
           <For each={heroes}>
             {item =>
-              <div class="basis-1/2" onClick={()=> setChosenHero(item)}>
+              <div class="basis-1/12 mt-1 -ml-10 sm:-ml-0" onClick={()=> setChosenHero(item)}>
                 <CroppedImage
                   imgbg="bg-black"
                   image={"/Heroes/" + item + "/icon.png"}
                   bg="bg-sky-800"
-                  borderSize="38" minWidth="130" maxWidth="130"
-                  imageSize="36" imageH="62%" imageV="55%" />
+                  borderSize="40" minWidth="130" maxWidth="130"
+                  imageSize="38" imageH="60%" imageV="55%" />
               </div>}
           </For>
         </div>
