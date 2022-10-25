@@ -105,38 +105,60 @@ function Get-HeroJson() {
     }
 }
 
-#single hero 
-Get-Location | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File 'HeroInfo.json'
+#deleting some extras for cleanliness:
+# Get-ChildItem -Directory | Get-ChildItem -Directory | ForEach-Object {
+#     foreach ($category in $_) {
+#         if ($category.Name -eq "ULT") {
+#             $category | Get-ChildItem -File | ForEach-Object {
+#                 if (-not ($_.Name -match "[0-9]_[a-z]+.png")) {      
+#                 Remove-Item $_ | Write-Output
+#                 }
+#             }
+#             continue;
+#         }
 
-# Make a json linking to every hero json, yeah something feels a bit wrong. Ill refactor if im still working on this at least a week
-$array = $(Join-Path (Get-Location)  '\Heroes\') | Get-ChildItem -Directory | ForEach-Object { $_.Name }
-$array | ConvertTo-Json |  Out-File (Join-Path (Get-Location)  '\Heroes\Info.json' )
+#     }
+#     foreach ($subCategory in ($category | Get-ChildItem -Directory)) {
+#         $subCategory | Get-ChildItem -File | ForEach-Object {
+#             if (-not ($_.Name -match "[0-9]_[a-z]+.png")) {      
+#                 Remove-Item $_ | Write-Output
+#             }
+#         }
+#     }
+# }
 
-# am I violatinvg DRY by canibalizing script above? Yes. Does it matter? No
-function Get-PositionalsJson() {
-    param (
-        $directory
-    )
+    #single hero 
+    # Get-Location | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File 'HeroInfo.json'
+
+    # Make a json linking to every hero json, yeah something feels a bit wrong. Ill refactor if im still working on this at least a week
+    $array = $(Join-Path (Get-Location)  '\Heroes\') | Get-ChildItem -Directory | ForEach-Object { $_.Name }
+    $array | ConvertTo-Json |  Out-File (Join-Path (Get-Location)  '\Heroes\Info.json' )
+
+    # am I violatinvg DRY by canibalizing script above? Yes. Does it matter? No
+    function Get-PositionalsJson() {
+        param (
+            $directory
+        )
     
-    $locationPathSplit = (($directory).Path.Split('\'))   
-    $augmentCategory = @{
-        Type     = $locationPathSplit[$locationPathSplit.Count - 1];
-        Contents = @()
-    }
-    foreach ($subCategory in ($directory | Get-ChildItem -Directory)) {
-        $subCategoryNameSplit = $($subCategory.Name.Split("."))
-        $skillAugment = @{
-            Id       = $subCategoryNameSplit[0]; 
-            Name     = $subCategoryNameSplit[1];
-            Augments = GetAugments($subCategory);
+        $locationPathSplit = (($directory).Path.Split('\'))   
+        $augmentCategory = @{
+            Type     = $locationPathSplit[$locationPathSplit.Count - 1];
+            Contents = @()
         }
-        $augmentCategory["Contents"] += $skillAugment
+        foreach ($subCategory in ($directory | Get-ChildItem -Directory)) {
+            $subCategoryNameSplit = $($subCategory.Name.Split("."))
+            $skillAugment = @{
+                Id       = $subCategoryNameSplit[0]; 
+                Name     = $subCategoryNameSplit[1];
+                Augments = GetAugments($subCategory);
+            }
+            $augmentCategory["Contents"] += $skillAugment
+        }
+        $augmentCategory
     }
-    $augmentCategory
-}
 
-Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.json
+    Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.json
 
 
-# The actives at last
-GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.json
+    # The actives at last
+    GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.json

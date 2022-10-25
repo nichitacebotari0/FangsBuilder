@@ -161,8 +161,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg="bg-sky-700 active:bg-sky-100"
                                 image={slots()[0].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[0].text}</div>
                         </Show>
                     </button>
@@ -177,8 +177,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg="bg-red-800 active:bg-sky-100"
                                 image={slots()[1].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[1].text}</div>
                         </Show>
                     </button>
@@ -194,8 +194,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg="bg-yellow-600 active:bg-sky-100"
                                 image={slots()[2].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[2].text}</div>
                         </Show>
                     </button>
@@ -210,8 +210,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg={getColor(slots()[3].type)}
                                 image={slots()[3].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[3].text}</div>
                         </Show>
                         <div class="text-white flexAugment-picker">
@@ -233,8 +233,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg="bg-violet-800 active:bg-sky-100"
                                 image={slots()[4].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[4].text}</div>
                         </Show>
                     </button>
@@ -265,8 +265,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg={getColor(slots()[6].type)}
                                 image={slots()[6].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[6].text}</div>
                         </Show>
                         <div class="text-white flexAugment-picker">
@@ -288,8 +288,8 @@ function Hero(props) {
                                 imgbg="bg-black"
                                 bg={getColor(slots()[7].type)}
                                 image={slots()[7].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="55%" imageV="45%" />
+                                borderSize="40" maxWidth="80" minWidth="50"
+                                imageSize="38" imageH="50%" imageV="50%" />
                             <div>{slots()[7].text}</div>
                         </Show>
                         <div class="text-white flexAugment-picker">
