@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from "@solidjs/router";
 import { createDeferred, createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import AugmentCategory from "./AugmentCategory";
 import AugmentDescription from "./AugmentDescription";
+import AugmentSlot from "./AugmentSlot";
 import CroppedImage from "./CroppedImage";
 import FlexPicker from "./FlexPicker";
 
@@ -12,14 +13,14 @@ async function fetcher(path, { value, refetching }) {
 }
 
 const augmentSlots = [
-    { type: "POSITIONAL", value: null, text: "" },
-    { type: "RED", value: null, text: "" },
-    { type: "YELLOW", value: null, text: "" },
-    { type: "FLEX", value: null, text: "" },
-    { type: "ULT", value: null, text: "" },
-    { type: "ACTIVE", value: null, text: "" },
-    { type: "FLEX", value: null, text: "" },
-    { type: "FLEX", value: null, text: "" }
+    { originalType: "POSITIONAL", type: "POSITIONAL", value: null, text: "" },
+    { originalType: "RED", type: "RED", value: null, text: "" },
+    { originalType: "YELLOW", type: "YELLOW", value: null, text: "" },
+    { originalType: "FLEX", type: "FLEX", value: null, text: "" },
+    { originalType: "ULT", type: "ULT", value: null, text: "" },
+    { originalType: "ACTIVE", type: "ACTIVE", value: null, text: "" },
+    { originalType: "FLEX", type: "FLEX", value: null, text: "" },
+    { originalType: "FLEX", type: "FLEX", value: null, text: "" }
 ]
 
 // this is why all augments should have an id unique, god im gonna move this all to sqlite soon,
@@ -150,161 +151,18 @@ function Hero(props) {
                 </div>
 
                 <div class="flex flex-wrap items-center justify-center mb-2 border-b-2 ml-2 mr-2 border-b-blue-800" >
-                    <button class="basis-40" onClick={() => setSelectedSlot(0)} >
-                        <Show when={slots()[0].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-sky-700  active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg="bg-sky-700 active:bg-sky-100"
-                                image={slots()[0].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[0].text}</div>
-                        </Show>
-                    </button>
-                    <button class="basis-40" onClick={() => setSelectedSlot(1)} >
-                        <Show when={slots()[1].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-red-800 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg="bg-red-800 active:bg-sky-100"
-                                image={slots()[1].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[1].text}</div>
-                        </Show>
-                    </button>
-
-                    <button class="basis-40" onClick={() => setSelectedSlot(2)}>
-                        <Show when={slots()[2].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-yellow-600 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg="bg-yellow-600 active:bg-sky-100"
-                                image={slots()[2].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[2].text}</div>
-                        </Show>
-                    </button>
-                    <button class="basis-40 flexAugment" >
-                        <Show when={slots()[3].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-stone-500 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg={getColor(slots()[3].type)}
-                                image={slots()[3].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[3].text}</div>
-                        </Show>
-                        <div class="text-white flexAugment-picker">
-                            <FlexPicker click={(c) => {
-                                slots()[3].type = c;
-                                setSlots(slots());
-                                setSelectedSlot(3);
-                            }} />
-                        </div>
-                    </button>
-                    <button class="basis-40" onClick={() => setSelectedSlot(4)} >
-                        <Show when={slots()[4].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-violet-800 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg="bg-violet-800 active:bg-sky-100"
-                                image={slots()[4].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[4].text}</div>
-                        </Show>
-                    </button>
-                    <button class="basis-40" onClick={() => setSelectedSlot(5)} >
-                        <Show when={slots()[5].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-yellow-800 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg="bg-yellow-800 active:bg-sky-100"
-                                image={slots()[5].value}
-                                borderSize="42" maxWidth="130" minWidth="130"
-                                imageSize="38" imageH="50%" imageV="45%" />
-                            <div>{slots()[5].text}</div>
-                        </Show>
-                    </button>
-                    <button class="basis-40 flexAugment" >
-                        <Show when={slots()[6].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-stone-500 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg={getColor(slots()[6].type)}
-                                image={slots()[6].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[6].text}</div>
-                        </Show>
-                        <div class="text-white flexAugment-picker">
-                            <FlexPicker click={(c) => {
-                                slots()[6].type = c;
-                                setSlots(slots());
-                                setSelectedSlot(6);
-                            }} />
-                        </div>
-                    </button>
-                    <button class="basis-40 flexAugment" >
-                        <Show when={slots()[7].value} fallback={<CroppedImage
-                            imgbg="bg-black"
-                            bg="bg-stone-500 active:bg-sky-100"
-                            image={location.origin + "/" + "Empty.png"}
-                            borderSize="32" maxWidth="130" minWidth="130"
-                            imageSize="26" imageH="55%" imageV="45%" />}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg={getColor(slots()[7].type)}
-                                image={slots()[7].value}
-                                borderSize="40" maxWidth="80" minWidth="50"
-                                imageSize="38" imageH="50%" imageV="50%" />
-                            <div>{slots()[7].text}</div>
-                        </Show>
-                        <div class="text-white flexAugment-picker">
-                            <FlexPicker click={(c) => {
-                                slots()[7].type = c;
-                                setSlots(slots());
-                                setSelectedSlot(7);
-                            }} />
-                        </div>
-                    </button>
+                    <AugmentSlot click={() => setSelectedSlot(0)} slot={slots()[0]} />
+                    <AugmentSlot click={() => setSelectedSlot(1)} slot={slots()[1]} />
+                    <AugmentSlot click={() => setSelectedSlot(2)} slot={slots()[2]} />
+                    <AugmentSlot click={() => setSelectedSlot(3)} slot={slots()[3]} />
+                    <AugmentSlot click={() => setSelectedSlot(4)} slot={slots()[4]} />
+                    <AugmentSlot click={() => setSelectedSlot(5)} slot={slots()[5]} />
+                    <AugmentSlot click={() => setSelectedSlot(6)} slot={slots()[6]} />
+                    <AugmentSlot click={() => setSelectedSlot(7)} slot={slots()[7]} />
                 </div>
 
                 <div class="flex flex-row flex-wrap p-2">
                     <Switch >
-
                         <Match when={slots()[selectedSlot()].type === "POSITIONAL"}>
                             <For each={positional.Contents}>
                                 {(item) =>

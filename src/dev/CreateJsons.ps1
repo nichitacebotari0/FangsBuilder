@@ -32,20 +32,21 @@ function New-AugmentJson() {
             $name = $id + "_z.png"
             Rename-Item -Path $_.FullName -NewName $name
             # The OCR module must be run in windows powershell so im launching the powershell i got in path which is ver 5
-            $x = powershell -OutputFormat Text -Command "& {
+            $desc = powershell -OutputFormat Text -Command "& {
             Import-Module -Name C:\Users\Nichita\Documents\PowerShell\Modules\PsOcr
             Get-Item $(Join-Path $directory $($id + "_z.png")) | Convert-PsoImageToText | Select-Object Text | ForEach-Object { `$_.Text } 
             }"
             $properties = [ordered]@{
                 Id          = $id;
-                Name        = $x[0];
+                Name        = $desc[0];
                 IconName    = $id + "_icon.png";
                 Description = @();
             }
-            $desc = $x | Select-Object -Skip 1 
-            if ($desc[0].Contains("[")) {
+            if (${desc}?.GetType() -isnot
+             [System.String]) {
                 $desc = $desc | Select-Object -Skip 1 
             }
+
             $properties.Description += $desc
             return $properties # prevents overwrite, maybe should keep description text in a separate file and build it up into this json but  I see no value in it atm. inb4 i curse myself later
         }
@@ -105,6 +106,49 @@ function Get-HeroJson() {
     }
 }
 
+
+#single hero 
+# Get-Location | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File 'HeroInfo.json'
+
+# Make a json linking to every hero json, yeah something feels a bit wrong. Ill refactor if im still working on this at least a week
+$array = $(Join-Path (Get-Location)  '\Heroes\') | Get-ChildItem -Directory | ForEach-Object { $_.Name }
+$array | ConvertTo-Json |  Out-File (Join-Path (Get-Location)  '\Heroes\Info.json' )
+
+# am I violatinvg DRY by canibalizing script above? Yes. Does it matter? No
+function Get-PositionalsJson() {
+    param (
+        [Parameter(
+            Position = 0, 
+            Mandatory = $true, 
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        $directory
+    )
+    
+    $locationPathSplit = (($directory).Path.Split('\'))   
+    $augmentCategory = [ordered]@{
+        Type     = $locationPathSplit[$locationPathSplit.Count - 1];
+        Contents = @();
+    }
+    foreach ($subCategory in ($directory | Get-ChildItem -Directory)) {
+        $subCategoryNameSplit = $($subCategory.Name.Split("."))
+        $skillAugment = @{
+            Id       = $subCategoryNameSplit[0]; 
+            Name     = $subCategoryNameSplit[1];
+            Augments = New-AugmentJson $subCategory;
+        }
+        $augmentCategory.Contents += $skillAugment
+    }
+    $augmentCategory
+}
+
+# Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.json
+
+
+# The actives at last
+# GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.json
+
+
 #deleting some extras for cleanliness:
 # Get-ChildItem -Directory | Get-ChildItem -Directory | ForEach-Object {
 #     foreach ($category in $_) {
@@ -126,39 +170,3 @@ function Get-HeroJson() {
 #         }
 #     }
 # }
-
-    #single hero 
-    # Get-Location | Get-HeroJson | ConvertTo-Json -Depth 10 |  Out-File 'HeroInfo.json'
-
-    # Make a json linking to every hero json, yeah something feels a bit wrong. Ill refactor if im still working on this at least a week
-    $array = $(Join-Path (Get-Location)  '\Heroes\') | Get-ChildItem -Directory | ForEach-Object { $_.Name }
-    $array | ConvertTo-Json |  Out-File (Join-Path (Get-Location)  '\Heroes\Info.json' )
-
-    # am I violatinvg DRY by canibalizing script above? Yes. Does it matter? No
-    function Get-PositionalsJson() {
-        param (
-            $directory
-        )
-    
-        $locationPathSplit = (($directory).Path.Split('\'))   
-        $augmentCategory = @{
-            Type     = $locationPathSplit[$locationPathSplit.Count - 1];
-            Contents = @()
-        }
-        foreach ($subCategory in ($directory | Get-ChildItem -Directory)) {
-            $subCategoryNameSplit = $($subCategory.Name.Split("."))
-            $skillAugment = @{
-                Id       = $subCategoryNameSplit[0]; 
-                Name     = $subCategoryNameSplit[1];
-                Augments = GetAugments($subCategory);
-            }
-            $augmentCategory["Contents"] += $skillAugment
-        }
-        $augmentCategory
-    }
-
-    Get-PositionalsJson -directory (Get-Location) | ConvertTo-Json -Depth 5  | Out-File Info.json
-
-
-    # The actives at last
-    GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.json
