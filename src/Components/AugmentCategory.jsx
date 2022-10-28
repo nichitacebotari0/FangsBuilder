@@ -5,7 +5,7 @@ import { Show } from "solid-js";
 function AugmentCategory(props) {
     const path = props.dir + props.data.Id + "." + props.data.Name + "/";
     return (
-        < div class="flex flex-row p- items-center">
+        < div class="flex flex-row p-1 items-center">
             <For each={props.data.Augments}>
                 {(item) =>
                     <Show when={item}>
@@ -17,7 +17,7 @@ function AugmentCategory(props) {
                                 borderSize="28" maxWidth="50"
                                 imageSize="26" imageH="48%" imageV="50%" />
 
-                            <div class="augment-tooltip w-20 sm:w-32 md:w-56 lg:w-80">
+                            <div class="augment-tooltip w-screen sm:w-4/5 md:w-3/4 lg:w-80">
                                 <AugmentDescription data={item} />
                             </div>
                         </button>

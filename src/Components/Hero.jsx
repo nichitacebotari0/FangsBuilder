@@ -1,10 +1,10 @@
 import { useParams, useSearchParams } from "@solidjs/router";
 import { createDeferred, createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
+import getAugmentColor, { position_tooltip } from "../Utils/Functions";
 import AugmentCategory from "./AugmentCategory";
 import AugmentDescription from "./AugmentDescription";
 import AugmentSlot from "./AugmentSlot";
 import CroppedImage from "./CroppedImage";
-import FlexPicker from "./FlexPicker";
 
 async function fetcher(path, { value, refetching }) {
     resetAugments();
@@ -44,9 +44,6 @@ function encodeAugments(augmentSlots) {
 }
 
 function decodeAugments(query, positionalJson, activeJson, heroJson, slots, setSlots) {
-    console.log("decode called:  " + query);
-    console.log(heroJson);
-    console.log(activeJson);
     if (!query)
         return;
     var augment = query.split(',');
@@ -104,17 +101,6 @@ function resetAugments() {
     });
 }
 
-function getColor(type) {
-    switch (type) {
-        case "RED":
-            return "bg-red-800";
-        case "YELLOW":
-            return "bg-yellow-600";
-        case "POSITIONAL":
-            return "bg-sky-700";
-    }
-}
-
 const positional = await (await fetch("/POSITIONAL/Info.json")).json()
 const actives = await (await fetch("/ACTIVE/Info.json")).json()
 function Hero(props) {
@@ -135,6 +121,17 @@ function Hero(props) {
             decodeAugments(querystr, positional, actives, data().Augments, sl, setSlotsContent)
         return current;
     });
+
+    // createEffect((prev) => {
+    //     let current = selectedSlot();
+    //     if (prev && prev.length > 0 && prev !== current) {
+    //         return current;
+    //     }
+    //     var tooltips = document.querySelectorAll(".augment");
+    //     tooltips.forEach(function (tooltip, index) {                // For each ktooltip
+    //         tooltip.addEventListener("mouseover", position_tooltip); // On hover, launch the function below
+    //     });
+    // });
     return (
         <div class=" text-sky-50">
             <Show when={data.state == "ready"}>
@@ -187,7 +184,7 @@ function Hero(props) {
                         </Match>
 
                         <Match when={slots()[selectedSlot()].type === "ACTIVE"}>
-                            <For each={actives}>
+                            {<For each={actives}>
                                 {(item) =>
                                     <button class="basis-1/6 text-center pb-2 augment" onClick=
                                         {() => {
@@ -196,20 +193,22 @@ function Hero(props) {
                                             setSlots(slots());
                                         }}>
                                         <div class="basis-10/12">
-                                            <CroppedImage
-                                                imgbg="bg-black"
-                                                bg={"bg-yellow-800"}
-                                                image={"../ACTIVE/" + item.IconName}
-                                                borderSize="40" maxWidth="100" minWidth="60"
-                                                imageSize="38" imageH="50%" imageV="50%" />
+                                            <div class={"clip-augment-container inline-block " + getAugmentColor(slots()[selectedSlot()].type) + " active:bg-sky-100"}>
+                                                <img class="clip-augment-image bg-black"
+                                                    src={"../ACTIVE/" + item.IconName} />
+                                            </div>
                                         </div>
                                         <div class={"basis-2/12 text-sm text-" + props.color}>{item.Name}</div>
-                                        <div class="augment-tooltip  w-20 sm:w-32 md:w-56 lg:w-80">
-                                            <AugmentDescription data={item} />
+                                        <div class="relative">
+                                            <div class="augment-tooltip w-screen sm:w-4/5 md:w-3/4 lg:w-80">
+                                                <AugmentDescription data={item} />
+                                            </div>
                                         </div>
                                     </button>
                                 }
                             </For>
+
+                            }
                         </Match>
 
                         <Match when={slots()[selectedSlot()].type === "RED"}>
@@ -261,19 +260,17 @@ function Hero(props) {
                         <Match when={slots()[selectedSlot()].type === "ULT"}>
                             <For each={data().Augments.filter((item) => item.Type == "ULT")[0].Contents}>
                                 {(item) =>
-                                    <button class="basis-1/3 border-white border-2 text-center augment" onClick=
+                                    <button class="basis-1/3 border-white border-2 text-center" onClick=
                                         {() => {
                                             slots()[selectedSlot()].value = location.origin + location.pathname + "/" + "ULT/" + item.IconName;
                                             slots()[selectedSlot()].text = item.Name;
                                             setSlots(slots());
                                         }}>
                                         <div class="basis-10/12">
-                                            <CroppedImage
-                                                imgbg="bg-black"
-                                                bg={"bg-violet-800"}
-                                                image={location.origin + location.pathname + "/" + "ULT/" + item.IconName}
-                                                borderSize="40" maxWidth="100" minWidth="60"
-                                                imageSize="38" imageH="50%" imageV="50%" />
+                                            <div class={"clip-augment-container inline-block " + getAugmentColor(slots()[selectedSlot()].type) + " active:bg-sky-100"}>
+                                                <img class="clip-augment-image bg-black"
+                                                    src={location.origin + location.pathname + "/" + "ULT/" + item.IconName} />
+                                            </div>
                                         </div>
                                         <div class="basis-2/12">
                                             <AugmentDescription data={item} />
