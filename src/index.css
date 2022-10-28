@@ -55,18 +55,19 @@
     .augment {
         position: relative;
         display: inline-block;
+        /* touch-action: none; */
     }
 
     .augment .augment-tooltip {
-        display: none;
-        top: 100%;
-        left: -5px;
+        visibility: hidden;
+        /* top: 100%; */
+        left: -10px;
         z-index: 1;
         position: absolute;
     }
 
     .augment:hover .augment-tooltip {
-        display: block;
+        visibility: visible;
     }
 
     .flexAugment {

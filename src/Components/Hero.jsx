@@ -1,5 +1,5 @@
 import { useParams, useSearchParams } from "@solidjs/router";
-import { createDeferred, createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
+import { createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import getAugmentColor, { position_tooltip } from "../Utils/Functions";
 import AugmentCategory from "./AugmentCategory";
 import AugmentDescription from "./AugmentDescription";
@@ -120,17 +120,6 @@ function Hero(props) {
             decodeAugments(querystr, positional, actives, data().Augments, sl, setSlotsContent)
         return current;
     });
-
-    // createEffect((prev) => {
-    //     let current = selectedSlot();
-    //     if (prev && prev.length > 0 && prev !== current) {
-    //         return current;
-    //     }
-    //     var tooltips = document.querySelectorAll(".augment");
-    //     tooltips.forEach(function (tooltip, index) {                // For each ktooltip
-    //         tooltip.addEventListener("mouseover", position_tooltip); // On hover, launch the function below
-    //     });
-    // });
     return (
         <div class=" text-sky-50">
             <Show when={data.state == "ready"}>
@@ -178,7 +167,8 @@ function Hero(props) {
                                             slots()[selectedSlot()].value = "../ACTIVE/" + item.IconName;
                                             slots()[selectedSlot()].text = item.Name;
                                             setSlots(slots());
-                                        }}>
+                                        }}
+                                        onMouseEnter={position_tooltip} onPointerEnter={position_tooltip}>
                                         <div class="basis-10/12">
                                             <div class={"clip-augment-container inline-block " + getAugmentColor(slots()[selectedSlot()].type) + " active:bg-sky-100"}>
                                                 <img class="clip-augment-image bg-black"
@@ -187,7 +177,7 @@ function Hero(props) {
                                         </div>
                                         <div class={"basis-2/12 text-sm text-" + props.color}>{item.Name}</div>
                                         <div class="relative">
-                                            <div class="augment-tooltip w-screen sm:w-4/5 md:w-3/4 lg:w-80">
+                                            <div class="augment-tooltip w-40 lg:w-80">
                                                 <AugmentDescription data={item} />
                                             </div>
                                         </div>

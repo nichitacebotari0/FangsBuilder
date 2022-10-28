@@ -19,7 +19,7 @@ function App() {
             </A>}
         </For>
       </div>
-      <div class="bg-black min-h-screen h-auto">
+      <div class="bg-black min-h-screen h-auto p-2">
         <Routes>
           <Route path={"/Heroes/:Hero"} component={Hero}></Route>
         </Routes>

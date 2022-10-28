@@ -18,7 +18,7 @@ function AugmentSlot(props) {
                     <img class="clip-augment-image bg-black"
                         src={props.slot.value} />
                 </div>
-                <div>{props.slot.text}</div>
+                <div class="pl-1 pr-1">{props.slot.text}</div>
             </Show>
 
             <Show when={props.slot.originalType == "FLEX"}>
