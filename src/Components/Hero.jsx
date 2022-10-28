@@ -134,16 +134,6 @@ function Hero(props) {
     return (
         <div class=" text-sky-50">
             <Show when={data.state == "ready"}>
-                <div class="flex flex-col justify-center mt-2 mb-2 p-2">
-                    <div class="basis-10/12 text-center">
-                        <div class={"clip-hero-container inline-block bg-sky-800 active:bg-sky-100"}>
-                            <img class="clip-hero-image bg-black"
-                                src={location.origin + location.pathname + "/" + data().IconName} />
-                        </div>
-                    </div>
-                    <div class="basis-2/12 text-center border-b-blue-800 border-b-2">{data().Name}</div>
-                </div>
-
                 <div class="flex flex-wrap items-center justify-center mb-2 border-b-2 ml-2 mr-2 border-b-blue-800" >
                     <AugmentSlot click={() => setSelectedSlot(0)} slot={slots()[0]} />
                     <AugmentSlot click={() => setSelectedSlot(1)} slot={slots()[1]} />

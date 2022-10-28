@@ -4,14 +4,15 @@ import Hero from './Components/Hero';
 
 const heroes = await (await fetch("/Heroes/Info.json")).json()
 function App() {
+  const params = useParams();
   return (
     <div class="flex flex-nowrap flex-col bg-sky-900">
-      <div class="flex flex-row flex-wrap lg:ml-10 md:ml-8 sm:ml-6 ml-10">
+      <div class="flex flex-row flex-wrap lg:ml-10 md:ml-8 sm:ml-6 ml-10 mb-2 mt-2">
         <For each={heroes}>
           {item =>
             <A class="lg:basis-1/12 sm:basis-1/6 basis-auto mt-1 lg:-ml-10 md:-ml-8 sm:-ml-6 -ml-10" noScroll={true} replace={true} href={"/Heroes/" + item + "/"}
               onClick={() => { }}>
-              <div class={"clip-hero-container bg-sky-600 active:bg-sky-100"}>
+              <div class={"clip-hero-container relative active:bg-sky-100 bg-sky-900"}>
                 <img class="clip-hero-image bg-black"
                   src={"/Heroes/" + item + "/icon.png"} />
               </div>

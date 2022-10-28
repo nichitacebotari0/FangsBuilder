@@ -3,23 +3,24 @@
 @tailwind utilities;
 
 @layer utilities {
+
+    .active .clip-hero-container {
+        background-color: rgb(220 38 38);
+        max-width: 110px;
+        z-index: 2;
+    }
+
     .clip-hero-container {
-        clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
-        --crop-size: 50%;
-        --crop-h: 50%;
-        --crop-v: 50%;
+        clip-path: circle(50% at 50% 50%);
         max-width: 100px;
         min-width: 40px;
     }
 
     .clip-hero-image {
-        clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
-        --crop-size: 48%;
-        --crop-h: 50%;
-        --crop-v: 50%;
+        clip-path: circle(48% at 50% 50%);
         height: auto;
     }
-    
+
     .clip-augment-container {
         clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
         --crop-size: 50%;
@@ -44,6 +45,10 @@
 
         .clip-augment-container {
             max-width: 80px;
+        }
+
+        .active .clip-hero-container {
+            max-width: 120px;
         }
     }
 
