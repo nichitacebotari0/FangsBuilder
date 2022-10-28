@@ -15,9 +15,9 @@ function App() {
               <CroppedImage
                 imgbg="bg-black"
                 image={"/Heroes/" + item + "/icon.png"}
-                bg="bg-sky-800"
-                borderSize="40" minWidth="130" maxWidth="130"
-                imageSize="38" imageH="60%" imageV="55%" />
+                bg="bg-sky-700"
+                borderSize="46" minWidth="50" maxWidth="90"
+                imageSize="44" imageH="50%" imageV="50%" />
             </A>}
         </For>
       </div>
