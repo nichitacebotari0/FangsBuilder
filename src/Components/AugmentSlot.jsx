@@ -7,7 +7,7 @@ import FlexPicker from "./FlexPicker";
 
 function AugmentSlot(props) {
     return (
-        <button class="basis-40 flexAugment focus:text-sky-300" onClick={() => { props.click() }}>
+        <button class="basis-20 md:basis-40 flexAugment focus:text-sky-300" onClick={() => { props.click() }}>
             <Show when={props.slot.value} fallback={
                 <div class={"clip-augment-container inline-block " + getAugmentColor(props.slot.type) + " active:bg-sky-100"}>
                     <img class="clip-augment-image bg-black"

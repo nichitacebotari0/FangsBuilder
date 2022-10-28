@@ -10,12 +10,10 @@ function AugmentCategory(props) {
                 {(item) =>
                     <Show when={item}>
                         <button class="basis-1/4 augment" onClick={() => props.click({ Path: path + item.IconName, Name: item.Name })}>
-                            <CroppedImage
-                                imgbg="bg-black"
-                                bg={"bg-" + props.color}
-                                image={path + item.IconName}
-                                borderSize="28" maxWidth="50"
-                                imageSize="26" imageH="48%" imageV="50%" />
+                            <div class={"clip-augment-container inline-block bg-" + props.color + " active:bg-sky-100"}>
+                                <img class="clip-augment-image bg-black"
+                                    src={path + item.IconName} />
+                            </div>
 
                             <div class="augment-tooltip w-screen sm:w-4/5 md:w-3/4 lg:w-80">
                                 <AugmentDescription data={item} />

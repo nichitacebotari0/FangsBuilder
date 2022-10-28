@@ -1,23 +1,20 @@
 import { Routes, Route, A, useParams, useSearchParams } from '@solidjs/router';
-import { createSignal, For } from 'solid-js';
-import CroppedImage from './Components/CroppedImage';
+import { For } from 'solid-js';
 import Hero from './Components/Hero';
 
 const heroes = await (await fetch("/Heroes/Info.json")).json()
 function App() {
   return (
     <div class="flex flex-nowrap flex-col bg-sky-900">
-      <div class="flex flex-row flex-wrap">
+      <div class="flex flex-row flex-wrap lg:ml-10 md:ml-8 sm:ml-6 ml-10">
         <For each={heroes}>
           {item =>
-            <A class="basis-1/12 mt-1 -ml-10 sm:-ml-0" noScroll={true} replace={true} href={"/Heroes/" + item + "/"}
+            <A class="lg:basis-1/12 sm:basis-1/6 basis-auto mt-1 lg:-ml-10 md:-ml-8 sm:-ml-6 -ml-10" noScroll={true} replace={true} href={"/Heroes/" + item + "/"}
               onClick={() => { }}>
-              <CroppedImage
-                imgbg="bg-black"
-                image={"/Heroes/" + item + "/icon.png"}
-                bg="bg-sky-700"
-                borderSize="46" minWidth="50" maxWidth="90"
-                imageSize="44" imageH="50%" imageV="50%" />
+              <div class={"clip-hero-container bg-sky-600 active:bg-sky-100"}>
+                <img class="clip-hero-image bg-black"
+                  src={"/Heroes/" + item + "/icon.png"} />
+              </div>
             </A>}
         </For>
       </div>

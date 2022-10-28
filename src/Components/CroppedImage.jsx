@@ -3,9 +3,9 @@ function CroppedImage(props) {
     const maxWidth = props.maxWidth ?? "";
     const maxHeight = props.maxHeight ?? ""
     return (
-        <div class={"clip-augment-container inline-block " + props.bg}
+        <div class={"clip-hero-container inline-block " + props.bg}
             style={"--crop-size: " + props.borderSize + "px; --crop-h: " + props.imageH + "; --crop-v: " + props.imageV + ";"}>
-            <img class={"clip-augment-image " + props.imgbg}
+            <img class={"clip-hero-image " + props.imgbg}
                 style={"--crop-size: " + props.imageSize + "px; --crop-h: " + props.imageH + "; --crop-v: " + props.imageV +
                     "; min-width: " + minWidth + "px;" +
                     "; max-width: " + maxWidth + "px;" +

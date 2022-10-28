@@ -4,7 +4,6 @@ import getAugmentColor, { position_tooltip } from "../Utils/Functions";
 import AugmentCategory from "./AugmentCategory";
 import AugmentDescription from "./AugmentDescription";
 import AugmentSlot from "./AugmentSlot";
-import CroppedImage from "./CroppedImage";
 
 async function fetcher(path, { value, refetching }) {
     resetAugments();
@@ -137,12 +136,10 @@ function Hero(props) {
             <Show when={data.state == "ready"}>
                 <div class="flex flex-col justify-center mt-2 mb-2 p-2">
                     <div class="basis-10/12 text-center">
-                        <CroppedImage
-                            imgbg="bg-black"
-                            image={location.origin + location.pathname + "/" + data().IconName}
-                            bg="bg-sky-800"
-                            borderSize="42"
-                            imageSize="38" imageH="60%" imageV="55%" />
+                        <div class={"clip-hero-container inline-block bg-sky-800 active:bg-sky-100"}>
+                            <img class="clip-hero-image bg-black"
+                                src={location.origin + location.pathname + "/" + data().IconName} />
+                        </div>
                     </div>
                     <div class="basis-2/12 text-center border-b-blue-800 border-b-2">{data().Name}</div>
                 </div>

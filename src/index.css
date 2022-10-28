@@ -3,19 +3,48 @@
 @tailwind utilities;
 
 @layer utilities {
-    .clip-augment-container {
+    .clip-hero-container {
         clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
-        --crop-size: 40px;
+        --crop-size: 50%;
         --crop-h: 50%;
         --crop-v: 50%;
+        max-width: 100px;
+        min-width: 40px;
+    }
+
+    .clip-hero-image {
+        clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
+        --crop-size: 48%;
+        --crop-h: 50%;
+        --crop-v: 50%;
+        height: auto;
+    }
+    
+    .clip-augment-container {
+        clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
+        --crop-size: 50%;
+        --crop-h: 50%;
+        --crop-v: 50%;
+        max-width: 40px;
     }
 
     .clip-augment-image {
         clip-path: circle(var(--crop-size) at var(--crop-h) var(--crop-v));
-        --crop-size: 38px;
+        --crop-size: 46%;
         --crop-h: 50%;
         --crop-v: 50%;
-        max-width: 80px;
+        height: auto;
+        max-width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .clip-augment-image {
+            max-width: 100%;
+        }
+
+        .clip-augment-container {
+            max-width: 80px;
+        }
     }
 
     .augment {
