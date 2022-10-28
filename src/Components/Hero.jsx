@@ -168,7 +168,7 @@ function Hero(props) {
                                             slots()[selectedSlot()].text = item.Name;
                                             setSlots(slots());
                                         }}
-                                        onMouseEnter={position_tooltip} onPointerEnter={position_tooltip}>
+                                        onPointerEnter={position_tooltip}>
                                         <div class="basis-10/12">
                                             <div class={"clip-augment-container inline-block " + getAugmentColor(slots()[selectedSlot()].type) + " active:bg-sky-100"}>
                                                 <img class="clip-augment-image bg-black"

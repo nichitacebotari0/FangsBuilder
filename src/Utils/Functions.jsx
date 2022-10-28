@@ -21,6 +21,6 @@ export function position_tooltip(event) {
     var tooltip = event.target.querySelector(".augment-tooltip");
     var tooltip_rect = tooltip.getBoundingClientRect();
     var rightOverflow = tooltip_rect.x + tooltip_rect.width - window.visualViewport.width;
-    if (rightOverflow > 0) 
+    if (rightOverflow > 0)
         tooltip.style.left = -rightOverflow + 'px';
 }

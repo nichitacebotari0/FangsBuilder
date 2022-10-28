@@ -1,6 +1,5 @@
 import { createEffect, Show } from "solid-js";
 import getAugmentColor from "../Utils/Functions";
-import CroppedImage from "./CroppedImage";
 import FlexPicker from "./FlexPicker";
 
 

@@ -61,7 +61,6 @@
     .augment .augment-tooltip {
         visibility: hidden;
         /* top: 100%; */
-        left: -10px;
         z-index: 1;
         position: absolute;
     }
