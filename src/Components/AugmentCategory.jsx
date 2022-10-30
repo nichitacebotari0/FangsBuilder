@@ -10,13 +10,13 @@ function AugmentCategory(props) {
                 {(item) =>
                     <Show when={item}>
                         <button class="basis-1/4 augment" onClick={() => props.click({ Path: path + item.IconName, Name: item.Name })}
-                            onPointerEnter={position_tooltip}>
+                            onPointerEnter={(e) => position_tooltip(e, ".augment-tooltip")}>
                             <div class={"clip-augment-container inline-block bg-" + props.color + " active:bg-sky-100"}>
                                 <img class="clip-augment-image bg-black"
                                     src={path + item.IconName} />
                             </div>
 
-                            <div class="augment-tooltip  w-60 md:w-80">
+                            <div class="augment-tooltip w-40 md:w-60 lg:w-80">
                                 <AugmentDescription data={item} />
                             </div>
                         </button>

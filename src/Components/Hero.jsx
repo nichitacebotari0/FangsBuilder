@@ -168,7 +168,7 @@ function Hero(props) {
                                             slots()[selectedSlot()].text = item.Name;
                                             setSlots(slots());
                                         }}
-                                        onPointerEnter={position_tooltip}>
+                                        onPointerEnter={e => position_tooltip(e, ".augment-tooltip")}>
                                         <div class="basis-10/12">
                                             <div class={"clip-augment-container inline-block " + getAugmentColor(slots()[selectedSlot()].type) + " active:bg-sky-100"}>
                                                 <img class="clip-augment-image bg-black"
@@ -177,7 +177,7 @@ function Hero(props) {
                                         </div>
                                         <div class={"basis-2/12 text-sm text-" + props.color}>{item.Name}</div>
                                         <div class="relative">
-                                            <div class="augment-tooltip w-40 lg:w-80">
+                                            <div class="augment-tooltip w-40 md:w-60 lg:w-80">
                                                 <AugmentDescription data={item} />
                                             </div>
                                         </div>

@@ -17,8 +17,8 @@ function getAugmentColor(type) {
 
 export default getAugmentColor;
 
-export function position_tooltip(event) {
-    var tooltip = event.target.querySelector(".augment-tooltip");
+export function position_tooltip(event, name) {
+    var tooltip = event.target.querySelector(name);
     var tooltip_rect = tooltip.getBoundingClientRect();
     var rightOverflow = tooltip_rect.x + tooltip_rect.width - window.visualViewport.width;
     if (rightOverflow > 0)
