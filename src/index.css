@@ -74,15 +74,14 @@
         display: inline-block;
     }
 
-    .flexAugment-picker {
-        display: none;
-        top: 100%;
-
+    .flexAugment .flexAugment-picker {
+        visibility: hidden;
+        /* top: 100%; */
         z-index: 1;
         position: absolute;
     }
 
-    .flexAugment:focus .flexAugment-picker {
-        display: block;
+    .flexAugment:hover .flexAugment-picker {
+        visibility: visible;
     }
 }

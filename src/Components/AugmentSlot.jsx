@@ -1,12 +1,13 @@
 import { createEffect, Show } from "solid-js";
-import getAugmentColor from "../Utils/Functions";
+import getAugmentColor, { position_tooltip } from "../Utils/Functions";
 import FlexPicker from "./FlexPicker";
 
 
 
 function AugmentSlot(props) {
     return (
-        <button class="basis-20 md:basis-40 flexAugment focus:text-sky-300" onClick={() => { props.click() }}>
+        <button class="basis-20 md:basis-40 flexAugment focus:text-sky-300" onClick={() => { props.click() }}
+        onPointerEnter={(e) => {  if (props.slot.originalType == "FLEX")  position_tooltip(e, ".flexAugment-picker")}}>
             <Show when={props.slot.value} fallback={
                 <div class={"clip-augment-container inline-block " + getAugmentColor(props.slot.type) + " active:bg-sky-100"}>
                     <img class="clip-augment-image bg-black"
