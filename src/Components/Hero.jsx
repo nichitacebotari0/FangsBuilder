@@ -101,7 +101,7 @@ function resetAugments() {
 }
 
 const positional = await (await fetch("/POSITIONAL/Info.json")).json()
-const actives = await (await fetch("/ACTIVE/Info.json")).json()
+const actives = await (await fetch("/ACTIVE/info.json")).json()
 function Hero(props) {
     const params = useParams();
     const [data] = createResource(() => (location.origin + "/Heroes/" + params.Hero + "/HeroInfo.json"), fetcher);

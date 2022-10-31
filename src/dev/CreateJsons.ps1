@@ -146,7 +146,7 @@ function Get-PositionalsJson() {
 
 
 # The actives at last
-# GetAugments(Get-Location) | ConvertTo-Json | Out-File Info.json
+# GetAugments(Get-Location) | ConvertTo-Json | Out-File info.json
 
 
 #deleting some extras for cleanliness:
