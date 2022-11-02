@@ -6,7 +6,6 @@ import FlexPicker from "./FlexPicker";
 
 
 function AugmentSlot(props) {
-    console.log(props.slot);
     return (
         <button class="basis-20 md:basis-40 augment focus:text-sky-300" onClick={() => { props.click() }}
             onPointerEnter={(e) => { position_tooltip(e, ".augment-tooltip") }}>

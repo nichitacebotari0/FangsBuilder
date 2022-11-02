@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "@solidjs/router";
+import { useLocation, useParams, useSearchParams } from "@solidjs/router";
 import { createEffect, createResource, createSignal, For, Match, Show, Switch } from "solid-js";
 import getAugmentColor, { position_tooltip } from "../Utils/Functions";
 import AugmentCategory from "./AugmentCategory";
@@ -105,6 +105,35 @@ function resetAugments() {
         element.text = "";
         element.description = "";
     });
+}
+
+function copy(elementId) {
+    var input = document.getElementById(elementId);
+    var isiOSDevice = navigator.userAgent.match("/ipad|iphone/i");
+
+    if (isiOSDevice) {
+        var editable = input.contentEditable;
+        var readOnly = input.readOnly;
+
+        input.contentEditable = true;
+        input.readOnly = false;
+
+        var range = document.createRange();
+        range.selectNodeContents(input);
+
+        var selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        input.setSelectionRange(0, 999999);
+        input.contentEditable = editable;
+        input.readOnly = readOnly;
+
+    } else {
+        input.select();
+    }
+
+    document.execCommand('copy');
 }
 
 const positional = await (await fetch("/POSITIONAL/Info.json")).json()
@@ -271,6 +300,13 @@ function Hero(props) {
                     </Switch>
                 </div>
 
+                <div class="flex flex-wrap flex-row items-center justify-center">
+                    <div class="m-2">Copy link to share</div>
+                    <input id="shareurl" class="bg-stone-700 rounded-md m-2" readOnly={true} value={location.origin + location.pathname + (searchParams.build ? ("?build=" + searchParams.build) : "")}></input>
+                    <button class="basis-12">
+                        <img class="bg-stone-600 rounded-lg" src={location.origin + "/clipboard.png"} onPointerUp={() => { copy("shareurl") }} />
+                    </button>
+                </div>
             </Show >
         </div >
     );
