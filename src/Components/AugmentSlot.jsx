@@ -1,13 +1,15 @@
 import { createEffect, Show } from "solid-js";
 import getAugmentColor, { position_tooltip } from "../Utils/Functions";
+import AugmentDescription from "./AugmentDescription";
 import FlexPicker from "./FlexPicker";
 
 
 
 function AugmentSlot(props) {
+    console.log(props.slot);
     return (
-        <button class="basis-20 md:basis-40 flexAugment focus:text-sky-300" onClick={() => { props.click() }}
-        onPointerEnter={(e) => {  if (props.slot.originalType == "FLEX")  position_tooltip(e, ".flexAugment-picker")}}>
+        <button class="basis-20 md:basis-40 augment focus:text-sky-300" onClick={() => { props.click() }}
+            onPointerEnter={(e) => { position_tooltip(e, ".augment-tooltip") }}>
             <Show when={props.slot.value} fallback={
                 <div class={"clip-augment-container inline-block " + getAugmentColor(props.slot.type) + " active:bg-sky-100"}>
                     <img class="clip-augment-image bg-black"
@@ -22,13 +24,19 @@ function AugmentSlot(props) {
             </Show>
 
             <Show when={props.slot.originalType == "FLEX"}>
-                <div class="text-white flexAugment-picker">
+                <div class="text-white augment-tooltip">
                     <FlexPicker click={(c) => {
                         props.slot.type = c;
                         props.click()
                         // setSlots(slots());
                         // setSelectedSlot(3);
                     }} />
+                </div>
+            </Show>
+
+            <Show when={props.slot.description !== ""}>
+                <div class="augment-tooltip w-40 md:w-60 lg:w-80 text-sky-50">
+                    <AugmentDescription data={{ Name: props.slot.text, Description: props.slot.description }} />
                 </div>
             </Show>
         </button>

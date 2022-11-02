@@ -61,27 +61,12 @@
     .augment .augment-tooltip {
         visibility: hidden;
         /* top: 100%; */
+        top : 0px;
         z-index: 1;
         position: absolute;
     }
 
     .augment:hover .augment-tooltip {
-        visibility: visible;
-    }
-
-    .flexAugment {
-        position: relative;
-        display: inline-block;
-    }
-
-    .flexAugment .flexAugment-picker {
-        visibility: hidden;
-        /* top: 100%; */
-        z-index: 1;
-        position: absolute;
-    }
-
-    .flexAugment:hover .flexAugment-picker {
         visibility: visible;
     }
 }

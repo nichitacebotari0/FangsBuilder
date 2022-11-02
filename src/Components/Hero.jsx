@@ -12,14 +12,14 @@ async function fetcher(path, { value, refetching }) {
 }
 
 const augmentSlots = [
-    { originalType: "POSITIONAL", type: "POSITIONAL", value: null, text: "" },
-    { originalType: "RED", type: "RED", value: null, text: "" },
-    { originalType: "YELLOW", type: "YELLOW", value: null, text: "" },
-    { originalType: "FLEX", type: "FLEX", value: null, text: "" },
-    { originalType: "ULT", type: "ULT", value: null, text: "" },
-    { originalType: "ACTIVE", type: "ACTIVE", value: null, text: "" },
-    { originalType: "FLEX", type: "FLEX", value: null, text: "" },
-    { originalType: "FLEX", type: "FLEX", value: null, text: "" }
+    { originalType: "POSITIONAL", type: "POSITIONAL", value: null, text: "", description: "" },
+    { originalType: "RED", type: "RED", value: null, text: "", description: "" },
+    { originalType: "YELLOW", type: "YELLOW", value: null, text: "", description: "" },
+    { originalType: "FLEX", type: "FLEX", value: null, text: "", description: "" },
+    { originalType: "ULT", type: "ULT", value: null, text: "", description: "" },
+    { originalType: "ACTIVE", type: "ACTIVE", value: null, text: "", description: "" },
+    { originalType: "FLEX", type: "FLEX", value: null, text: "", description: "" },
+    { originalType: "FLEX", type: "FLEX", value: null, text: "", description: "" }
 ]
 
 // this is why all augments should have an id unique, god im gonna move this all to sqlite soon,
@@ -59,12 +59,14 @@ function decodeAugments(query, positionalJson, activeJson, heroJson, slots, setS
                 .filter(t => t.Id == split[1])[0];
             val.value = location.origin + location.pathname + "/" + "ULT/" + aug.IconName;
             val.text = aug.Name;
+            val.description = aug.Description;
         }
         else if (split[0] == "ACTIVE") {
             var aug = activeJson
                 .filter(t => t.Id == split[1])[0];
             val.value = "../ACTIVE/" + aug.IconName;
             val.text = aug.Name;
+            val.description = aug.Description;
         }
         else if (split[0] == "POSITIONAL") {
             var category = positionalJson
@@ -74,6 +76,7 @@ function decodeAugments(query, positionalJson, activeJson, heroJson, slots, setS
                 .filter(t => t.Id == split[2])[0];
             val.value = "../POSITIONAL/" + category.Id + "." + category.Name + "/" + aug.IconName;
             val.text = aug.Name;
+            val.description = aug.Description;
         }
         else {
             var category = heroJson
@@ -85,10 +88,12 @@ function decodeAugments(query, positionalJson, activeJson, heroJson, slots, setS
                 .filter(t => t.Id == split[2])[0];
             val.value = location.origin + location.pathname + "/" + split[0] + "/" + category.Id + "." + category.Name + "/" + aug.IconName;
             val.text = aug.Name;
+            val.description = aug.Description;
         }
         slots[i].type = split[0];
         slots[i].value = val.value;
         slots[i].text = val.text;
+        slots[i].description = val.description;
     };
     setSlots(slots);
 }
@@ -96,7 +101,9 @@ function decodeAugments(query, positionalJson, activeJson, heroJson, slots, setS
 function resetAugments() {
     augmentSlots.forEach(element => {
         element.value = null;
+        element.type = element.originalType;
         element.text = "";
+        element.description = "";
     });
 }
 
@@ -150,6 +157,7 @@ function Hero(props) {
                                                         }
                                                         slots()[selectedSlot()].value = obj.Path;
                                                         slots()[selectedSlot()].text = obj.Name;
+                                                        slots()[selectedSlot()].description = obj.Description;
                                                         setSlots(slots());
                                                     }} />
                                             </div>
@@ -166,6 +174,7 @@ function Hero(props) {
                                         {() => {
                                             slots()[selectedSlot()].value = "../ACTIVE/" + item.IconName;
                                             slots()[selectedSlot()].text = item.Name;
+                                            slots()[selectedSlot()].description = item.Description;
                                             setSlots(slots());
                                         }}
                                         onPointerEnter={e => position_tooltip(e, ".augment-tooltip")}>
@@ -202,6 +211,7 @@ function Hero(props) {
                                                         }
                                                         slots()[selectedSlot()].value = obj.Path;
                                                         slots()[selectedSlot()].text = obj.Name;
+                                                        slots()[selectedSlot()].description = obj.Description;
                                                         setSlots(slots());
                                                     }} />
                                             </div>
@@ -225,6 +235,7 @@ function Hero(props) {
                                                         }
                                                         slots()[selectedSlot()].value = obj.Path;
                                                         slots()[selectedSlot()].text = obj.Name;
+                                                        slots()[selectedSlot()].description = obj.Description;
                                                         setSlots(slots());
                                                     }} />
                                             </div>
@@ -241,6 +252,7 @@ function Hero(props) {
                                         {() => {
                                             slots()[selectedSlot()].value = location.origin + location.pathname + "/" + "ULT/" + item.IconName;
                                             slots()[selectedSlot()].text = item.Name;
+                                            slots()[selectedSlot()].description = item.Description;
                                             setSlots(slots());
                                         }}>
                                         <div class="basis-10/12">

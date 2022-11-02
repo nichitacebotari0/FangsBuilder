@@ -18,9 +18,15 @@ function getAugmentColor(type) {
 export default getAugmentColor;
 
 export function position_tooltip(event, name) {
-    var tooltip = event.target.querySelector(name);
-    var tooltip_rect = tooltip.getBoundingClientRect();
-    var rightOverflow = tooltip_rect.x + tooltip_rect.width - window.visualViewport.width;
-    if (rightOverflow > 0)
-        tooltip.style.left = -rightOverflow + 'px';
+    var tooltips = event.target.querySelectorAll(name);
+    let verticalOffset = event.target.getBoundingClientRect().height;
+    tooltips.forEach(tooltip => {
+        var tooltip_rect = tooltip.getBoundingClientRect();
+        var rightOverflow = tooltip_rect.x + tooltip_rect.width - window.visualViewport.width;
+        if (rightOverflow > 0)
+            tooltip.style.left = -rightOverflow + 'px';
+
+        tooltip.style.top = verticalOffset + 'px';
+        verticalOffset += tooltip_rect.height;
+    });
 }
