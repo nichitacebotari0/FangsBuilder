@@ -1,4 +1,5 @@
-https://prodstafangsbuilder.z6.web.core.windows.net/
+Running through azure cdn(classic): https://fangsbuilder.azureedge.net  
+The actual storage account's $web: https://prodstafangsbuilder.z6.web.core.windows.net/
 
 ## Available Scripts
 
