@@ -1,28 +1,15 @@
 Running through azure cdn(classic): https://fangsbuilder.azureedge.net  
 The actual storage account's $web: https://prodstafangsbuilder.z6.web.core.windows.net/
 
-## Available Scripts
+Currently being rewritten here: https://github.com/nichitacebotari0/FangsBuilder-ng .With desire to add features involving backend: https://github.com/nichitacebotari0/api , specifically: auth using discord Fangs Server Roles(done),  persisting builds, voting on builds(see which builds are good), add guides and potentially automatically list all guides for a particular build as youre making that build in the editor(use the build editor like a search engine), and other interesing ideas
 
-In the project directory, you can run:
+# Features:
+Browse to particular hero using solid-router. Create a build for that hero which is encoded into a string and written as a querystring param into the link. Link is shareable, pasting it in will show the same build again, meaning you can share your build with others. Implementation is purely front end, hosted in an azure storage container, served through azure CDN(Microsoft Classic).
+ 
 
-### `npm dev` or `npm start`
+Deployment using Github Actions to Azure storage container created with terraform.  
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-## Deployment
-
-Deployment using Github Actions to Azure storage container created with terraform.
-
-Stuff done manually: 
+## Stuff done manually:  
 1. Created Service principal using az ad sp create-for-rbac with  contributor role for subscription  
 2. Assigned him storage blob data contributorrole for the resource group  
 3. In case I want to delete a dir:  az storage blob directory delete --account-name accountname --container-name '$web' --directory-path Heroes --recursive  
