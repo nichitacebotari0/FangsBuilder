@@ -1,7 +1,7 @@
 terraform {
   backend "azurerm" {
-    resource_group_name  = "CVWebsite"
-    storage_account_name = "prodstacvwebsite"
+    resource_group_name  = "rg-terraform"
+    storage_account_name = "prodstaterraform"
     container_name       = "tfstate"
     key                  = "FangsBuilder.tfstate"
   }
